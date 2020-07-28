@@ -7,21 +7,36 @@ async function run() {
     , applicationId = getRequiredInputValue('application_id')
     ;
 
+  let app;
   try {
-    const app = await githubApplication.create(privateKey, applicationId)
-      , installation = getInstallation(app)
+    app = await githubApplication.create(privateKey, applicationId);
+  } catch(err) {
+    fail(err, 'Failed to initialize GitHub Application connection');
+  }
+
+  try {
+    const installation = getInstallation(app)
       , token = app.getInstallationAccessToken(installation.id)
-    ;
+      ;
 
     // Register the secret to mask it in the output
     core.setSecret(token);
     core.setOutput('token', token);
-
   } catch (err) {
-    core.setFailed(err.message);
+    fail(err);
   }
 }
 run();
+
+function fail(err, message) {
+  core.error(err);
+
+  if (message) {
+    core.setFailed(message);
+  } else {
+    core.setFailed(err.message);
+  }
+}
 
 function getRequiredInputValue(key) {
   return core.getInput(key, {required: true});
