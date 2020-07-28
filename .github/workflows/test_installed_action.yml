@@ -22,8 +22,9 @@ jobs:
 
       - name: Use token to read details
         uses: actions/github-script@v2
+        env:
+          TOKEN: ${{ steps.use_action.outputs.token }}
         with:
-          github-token: ${{ steps.use_action.outputs.token }}
           script: |
-            const repo = await github.repos.get(context.repo);
+            const repo = await github.getOctokit(process.env.TOKEN).repos.get(context.repo);
             console.log(JSON.stringify(repo, null, 2));
