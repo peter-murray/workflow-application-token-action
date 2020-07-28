@@ -24,6 +24,6 @@ jobs:
         uses: actions/github-script@v2
         with:
           github-token: ${{ steps.use_action.outputs.token }}
-          github-script: |
+          script: |
             const repo = await github.repos.get(context.repo);
             console.log(JSON.stringify(repo, null, 2));
