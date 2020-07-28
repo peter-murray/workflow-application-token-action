@@ -8,8 +8,15 @@ on:
 jobs:
   test_failure:
     runs-on: ubuntu-latest
-
+    continue-on-error: true
+    
+    outputs:
+      action_step_outcome: ${{ steps.use_action.outcome }}
+    
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        
       - name: Use action 
         id: use_action
         uses: ./
@@ -17,9 +24,14 @@ jobs:
           application_id: ${{ secrets.APPLICATION_ID_NOT_INSTALLED }}
           application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY_NOT_INSTALLED }}
         
+  validate_results:
+    needs: test_failure
+    
+    runs-on: ubuntu-latest   
+    
+    steps:
       - name: Validate failure
-        if: success()
+        if: ${{ jobs.test_failure.outputs.action_step_outcome }} != 'failure'
         run: |
-          echo "Should have failed as the application is not installed"
+          echo "Should have failed as the application is not installed, but was ${{ jobs.test_failure.outputs.action_step_outcome }}"
           exit 1
-        
