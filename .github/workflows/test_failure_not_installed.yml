@@ -1,0 +1,25 @@
+# Tests this action failure by the application not being installed on the repository
+
+name: Test Failure - not installed
+
+on:
+  push:
+
+jobs:
+  test_failure:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Use action 
+        id: use_action
+        uses: ./
+        with:
+          application_id: ${{ secrets.APPLICATION_ID_NOT_INSTALLED }}
+          application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY }}
+        
+      - name: Validate failure
+        if: succeeded()
+        run: |
+          echo "Should have failed as the application is not installed"
+          exit 1
+        
