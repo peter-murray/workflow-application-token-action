@@ -21,11 +21,12 @@ async function run() {
 
     const installation = await app.getRepositoryInstallation(repoParts[0], repoParts[1]);
     if (installation && installation.id) {
-      const token = await app.getInstallationAccessToken(installation.id);
+      const accessToken = await app.getInstallationAccessToken(installation.id);
 
       // Register the secret to mask it in the output
-      core.setSecret(token);
-      core.setOutput('token', token);
+      core.setSecret(accessToken.token);
+      core.setOutput('token', accessToken.token);
+      core.info(`Successfully generated an access token for application.`)
     } else {
       fail(null, `GitHub Application is not installed on repository: ${repository}`);
     }
