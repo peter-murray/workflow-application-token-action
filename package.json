@@ -15,7 +15,10 @@
     "token"
   ],
   "author": "peter-murray",
-  "license": "",
+  "license": "Apache-2.0",
+  "repository": {
+    "url": "https://github.com/peter-murray/workflow-application-token-action"
+  },
   "dependencies": {
     "@actions/core": "^1.2.4",
     "@actions/github": "^4.0.0",
