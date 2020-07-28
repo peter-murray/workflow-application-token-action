@@ -1,0 +1,24 @@
+---
+
+name: workflow-application-token-action
+description: Obtain a temporary acces token for a GitHub Application when running in a GitHub Actions Workflow.
+author: peter-murray
+
+inputs:
+  application_private_key:
+    required: true
+
+  application_id:
+    required: true
+
+outputs:
+  token:
+    description: A valid token representing the Application that can be used to access what the Application has been scoped to access.
+
+runs:
+  using: node12
+  main: dist/index.js
+
+branding:
+  icon: lock
+  color: green
