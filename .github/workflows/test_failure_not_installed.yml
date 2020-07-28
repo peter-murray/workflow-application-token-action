@@ -11,7 +11,7 @@ jobs:
     continue-on-error: true
     
     outputs:
-      action_step_outcome: ${{ steps.use_action.outcome }}
+      action_step_outcome: ${{ steps.use_action.outputs.outcome }}
     
     steps:
       - name: Checkout
