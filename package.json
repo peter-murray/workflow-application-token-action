@@ -1,6 +1,6 @@
 {
   "name": "workflow-application-token-action",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "GitHub Action to generate a GitHub Application access token for use in GitHub Actions workflows",
   "main": "index.js",
   "scripts": {

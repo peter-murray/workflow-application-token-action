@@ -18,7 +18,8 @@ more protection against any leaking of credentials from a Workflow.
 
 
 ## Usage
-To use this action you first need a GitHub Application created so that you can request temporary credentials on behalf of the application inside your workflows.
+To use this action you first need a GitHub Application created so that you can request temporary credentials on behalf 
+of the application inside your workflows.
 
 __Requirements:__
 * A new or existing GitHub Application with the access scopes required
@@ -27,7 +28,8 @@ __Requirements:__
 
 
 ### Creating a GitHub Application
-You will need to have a GitHub Application that is scoped with the necessary permissions for the token that you want to retrieve at runtime.
+You will need to have a GitHub Application that is scoped with the necessary permissions for the token that you want to 
+retrieve at runtime.
 
 To create a GitHub Application you can follow the steps available at https://docs.github.com/en/developers/apps/creating-a-github-app
 
@@ -40,30 +42,33 @@ The important configuration details for the application are:
 * `Repository permissions`, `Organization permissions` and/or `User permissions` should be set to allow the access required for the token that will be issued
 * `Where can this GitHub App be installed?` should be scoped to your desired audience (the current account, or any account)
 
-Once the application is created you will be taken to the `General` settings page for the new applicaiont.
-The GitHub Application will be issued an `App ID` which you can see in the `About` section, take note of this for later use in the Actions workflow.
+Once the application has been created you will be taken to the `General` settings page for the new application.
+The GitHub Application will be issued an `App ID` which you can see in the `About` section, take note of this for later 
+use in the Actions workflow.
 
-On the `General` settings page for the application, at the bottom there is a `Private keys` section that you will need to use
-to generate a private key so that we can sign access token requests with. Generate a new private key and store the information for later use.
+On the `General` settings page for the application, at the bottom there is a `Private keys` section that you can use to 
+generate a private key that can be utilized to authenticate as the application.
+Generate a new private key and store the information for later use.
 
 _Note: the private keys can and should be rotated periodically to limit the risks of them being exposed in use._
 
 
-### Authorize the GitHub Application
-Once you have the GitHub Application defined, you will need to authorize the application on the target repository or repositories that
-you want it to have access to. Typically these will be any repositories that you want to gather information from or want the application to modify
-as per the scopes that were defined when the application was created.
+### Install the GitHub Application
+Once you have the GitHub Application defined, you will need to install the application on the target repository or 
+repositories that you want it to have access to. These will be any repositories that you want to gather information 
+from or want the application to modify as per the scopes that were defined when the application was installed.
 
-You will also need to have install the GitHub Application on the repository that will be retrieving tokens for the GitHub Application via the GitHub Actions workflow
-as this is a hard requirement for the action currently. 
+_Note: The GitHub Application will need to be installed on the repository that you are executing the GitHub Actions 
+workflow from, as the implementation requires this before it will generate access tokens for you_.
 
 
 ### Using the GitHub Action in a Workflow
 
-To use the action in a worklow it is recommended that you store the GitHub Application Private key in GitHub Secrets. This can be
-done at a repository or organization level (provided that the actions workflow has access to the secret).
+To use the action in a worklow, it is recommended that you store the GitHub Application Private key in GitHub Secrets. 
+This can be done at a repository or organization level (provided that the actions workflow has access to the secret).
 
-When storing the Private key, you can paste the raw PEM encoded certificate contents that the GitHub Application generates for you or Base64 encode it. 
+When storing the Private key, you can store the raw PEM encoded certificate contents that the GitHub Application 
+generates for you or Base64 encode it in the secret. 
 
 #### Parameters
 
