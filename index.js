@@ -19,9 +19,9 @@ async function run() {
       , repoParts = repository.split('/')
     ;
 
-    const installation = app.getRepositoryInstallation(repoParts[0], repoParts[1]);
+    const installation = await app.getRepositoryInstallation(repoParts[0], repoParts[1]);
     if (installation && installation.id) {
-      const token = app.getInstallationAccessToken(installation.id);
+      const token = await app.getInstallationAccessToken(installation.id);
 
       // Register the secret to mask it in the output
       core.setSecret(token);
