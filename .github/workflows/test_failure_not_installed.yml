@@ -32,7 +32,7 @@ jobs:
     
     steps:
       - name: Validate failure
-        if: ${{ needs.test_failure.outputs.action_step_outcome }} != 'failure'
+        if: needs.test_failure.outputs.action_step_outcome != 'failure'
         run: |
           echo "Outcome: ${{ needs.test_failure.outputs.action_step_outcome }}"
           echo "Conclusion: ${{ needs.test_failure.outputs.action_step_conclusion }}"
