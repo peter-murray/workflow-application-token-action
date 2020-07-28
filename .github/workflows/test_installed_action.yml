@@ -1,6 +1,6 @@
-# Tests this action failure by the application not being installed on the repository
+# Tests this action success by the application already being installed on the repository
 
-name: Test Failure - not installed
+name: Test Success - installed action
 
 on:
   push:
