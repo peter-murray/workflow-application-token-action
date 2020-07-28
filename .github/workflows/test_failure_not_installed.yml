@@ -31,7 +31,7 @@ jobs:
     
     steps:
       - name: Validate failure
-        if: ${{ jobs.test_failure.outputs.action_step_outcome }} != 'failure'
+        if: ${{ needs.test_failure.outputs.action_step_outcome }} != 'failure'
         run: |
           echo "Should have failed as the application is not installed, but was ${{ jobs.test_failure.outputs.action_step_outcome }}"
           exit 1
