@@ -1,14 +1,16 @@
 ---
 
 name: workflow-application-token-action
-description: Obtain a temporary acces token for a GitHub Application when running in a GitHub Actions Workflow.
+description: Obtain a temporary access token for a GitHub Application when running in a GitHub Actions Workflow.
 author: peter-murray
 
 inputs:
   application_private_key:
+    description: GitHub Application Private Key value.
     required: true
 
   application_id:
+    description: GitHub Application ID value.
     required: true
 
 outputs:

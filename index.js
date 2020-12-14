@@ -26,6 +26,7 @@ async function run() {
       // Register the secret to mask it in the output
       core.setSecret(accessToken.token);
       core.setOutput('token', accessToken.token);
+      core.info(JSON.stringify(accessToken));
       core.info(`Successfully generated an access token for application.`)
     } else {
       fail(null, `GitHub Application is not installed on repository: ${repository}`);
