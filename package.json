@@ -1,31 +1,31 @@
 {
-  "name": "workflow-application-token-action",
-  "version": "1.0.0",
-  "description": "GitHub Action to generate a GitHub Application access token for use in GitHub Actions workflows",
-  "main": "index.js",
-  "scripts": {
-    "test": "mocha --recursive \"lib/**/*.test.js\"",
-    "build": "npx @zeit/ncc build index.js"
-  },
-  "keywords": [
-    "github-actions",
-    "github",
-    "actions",
-    "github-application",
-    "token"
-  ],
-  "author": "peter-murray",
-  "license": "Apache-2.0",
-  "repository": {
-    "url": "https://github.com/peter-murray/workflow-application-token-action"
-  },
-  "dependencies": {
-    "@actions/core": "^1.2.4",
-    "@actions/github": "^4.0.0",
-    "jsonwebtoken": "^8.5.1"
-  },
-  "devDependencies": {
-    "chai": "^4.2.0",
-    "mocha": "^8.0.1"
-  }
+    "name": "workflow-application-token-action",
+    "version": "1.0.0",
+    "description": "GitHub Action to generate a GitHub Application access token for use in GitHub Actions workflows",
+    "main": "index.js",
+    "scripts": {
+        "test": "mocha --recursive \"lib/**/*.test.js\"",
+        "build": "npx @vercel/ncc build -m index.js"
+    },
+    "keywords": [
+        "github-actions",
+        "github",
+        "actions",
+        "github-application",
+        "token"
+    ],
+    "author": "peter-murray",
+    "license": "Apache-2.0",
+    "repository": {
+        "url": "https://github.com/peter-murray/workflow-application-token-action"
+    },
+    "dependencies": {
+        "@actions/core": "^1.2.6",
+        "@actions/github": "^4.0.0",
+        "jsonwebtoken": "^8.5.1"
+    },
+    "devDependencies": {
+        "chai": "^4.2.0",
+        "mocha": "^8.2.1"
+    }
 }
