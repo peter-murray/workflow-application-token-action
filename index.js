@@ -40,7 +40,8 @@ async function run() {
 run();
 
 function fail(err, message) {
-  // core.error(err);
+  core.error(err);
+  
   if (message) {
     core.setFailed(message);
   } else {

@@ -1,11 +1,11 @@
 {
     "name": "workflow-application-token-action",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "GitHub Action to generate a GitHub Application access token for use in GitHub Actions workflows",
     "main": "index.js",
     "scripts": {
         "test": "mocha --recursive \"lib/**/*.test.js\"",
-        "build": "npx @vercel/ncc@0.28.2 build -m index.js"
+        "build": "npx @vercel/ncc@0.28.5 build -m index.js"
     },
     "keywords": [
         "github-actions",
@@ -20,12 +20,12 @@
         "url": "https://github.com/peter-murray/workflow-application-token-action"
     },
     "dependencies": {
-        "@actions/core": "^1.2.6",
+        "@actions/core": "^1.2.7",
         "@actions/github": "^4.0.0",
         "jsonwebtoken": "^8.5.1"
     },
     "devDependencies": {
-        "chai": "^4.2.0",
-        "mocha": "^8.2.1"
+        "chai": "^4.3.4",
+        "mocha": "^8.4.0"
     }
 }
