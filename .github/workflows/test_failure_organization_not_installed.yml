@@ -4,6 +4,7 @@ name: Test Failure - organization - not installed
 
 on:
   push:
+  workflow_dispatch:
 
 jobs:
   test_failure:

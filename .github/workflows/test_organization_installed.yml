@@ -4,6 +4,7 @@ name: Test Success - repository - installed
 
 on:
   push:
+  workflow_dispatch:
 
 jobs:
   test:

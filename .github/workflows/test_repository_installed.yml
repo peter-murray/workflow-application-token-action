@@ -4,6 +4,7 @@ name: Test Success - organization - installed
 
 on:
   push:
+  workflow_dispatch:
 
 jobs:
   test:
