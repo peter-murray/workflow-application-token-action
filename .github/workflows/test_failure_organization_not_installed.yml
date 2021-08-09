@@ -1,6 +1,6 @@
-# Tests this action failure by the application not being installed on the repository
+# Tests this action failure by the application not being installed on the organization
 
-name: Test Failure - not installed
+name: Test Failure - organization - not installed
 
 on:
   push:
@@ -24,6 +24,7 @@ jobs:
         with:
           application_id: ${{ secrets.APPLICATION_ID_NOT_INSTALLED }}
           application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY_NOT_INSTALLED }}
+          organization: devopsventures
         
   validate_results:
     needs: test_failure

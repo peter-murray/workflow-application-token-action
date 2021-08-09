@@ -1,6 +1,6 @@
-# Tests this action success by the application already being installed on the repository
+# Tests this action success by the application already being installed on an organization
 
-name: Test Success - installed action
+name: Test Success - organization - installed
 
 on:
   push:
@@ -19,11 +19,12 @@ jobs:
         with:
           application_id: ${{ secrets.APPLICATION_ID }}
           application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY }}
+          organization: octodemo
 
       - name: Use token to read details
         uses: actions/github-script@v2
         with:
           github-token: ${{ steps.use_action.outputs.token }}
           script: |
-            const repo = await github.repos.get(context.repo);
+            const repo = await github.repos.get({owner: 'octodemo', repo: 'demo-bootstrap'});
             console.log(JSON.stringify(repo, null, 2));
