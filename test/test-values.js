@@ -22,7 +22,11 @@ module.exports = {
 
   getTestRepositoryOwner: function(appName) {
     return getAppTestValue(appName, 'repo.owner');
-  }
+  },
+
+  getTestOrganization: function(appName) {
+    return getAppTestValue(appName, 'org');
+  },
 }
 
 function loadData() {

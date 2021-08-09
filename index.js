@@ -15,22 +15,41 @@ async function run() {
   }
 
   if (app) {
-    try {
-      const repository = process.env['GITHUB_REPOSITORY']
-        , repoParts = repository.split('/')
-      ;
-  
-      const installation = await app.getRepositoryInstallation(repoParts[0], repoParts[1]);
-      if (installation && installation.id) {
-        const accessToken = await app.getInstallationAccessToken(installation.id);
-  
+    try {  
+      let installationId;
+      const userSpecifiedOrganization = core.getInput('organization');
+
+      if (userSpecifiedOrganization) {
+        // use the organization specified to get the installation
+        const installation = await app.getOrganizationInstallation(userSpecifiedOrganization);
+        if (installation && installation.id) {
+          installationId = installation.id;
+        } else {
+          fail(null, `GitHub Application is not installed on the specified organization: ${userSpecifiedOrganization}`);
+        }
+      } else {
+        // fallback to getting a repository installation
+        const repository = process.env['GITHUB_REPOSITORY']
+          , repoParts = repository.split('/')
+          ;
+        installation = await app.getRepositoryInstallation(repoParts[0], repoParts[1]);
+        if (installation && installation.id) {
+          installationId = installation.id;
+        } else {
+          fail(null, `GitHub Application is not installed on repository: ${repository}`);
+        }
+      }
+      
+      if (installationId) {
+        const accessToken = await app.getInstallationAccessToken(installationId);
+
         // Register the secret to mask it in the output
         core.setSecret(accessToken.token);
         core.setOutput('token', accessToken.token);
         core.info(JSON.stringify(accessToken));
         core.info(`Successfully generated an access token for application.`)
       } else {
-        fail(null, `GitHub Application is not installed on repository: ${repository}`);
+        fail('No installation of the specified GitHub application was abel to be retrieved');
       }
     } catch (err) {
       fail(err);
