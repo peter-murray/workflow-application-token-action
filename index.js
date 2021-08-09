@@ -15,11 +15,19 @@ async function run() {
   }
 
   if (app) {
-    try {  
+    core.info(`Found GitHub Application: ${app.name}`);
+
+    try {
+      const userSpecifiedOrganization = core.getInput('organization')
+        , repository = process.env['GITHUB_REPOSITORY']
+        , repoParts = repository.split('/')
+      ;
+
       let installationId;
-      const userSpecifiedOrganization = core.getInput('organization');
 
       if (userSpecifiedOrganization) {
+        core.info(`Obtaining application installation for organization: ${userSpecifiedOrganization}`);
+
         // use the organization specified to get the installation
         const installation = await app.getOrganizationInstallation(userSpecifiedOrganization);
         if (installation && installation.id) {
@@ -28,11 +36,10 @@ async function run() {
           fail(null, `GitHub Application is not installed on the specified organization: ${userSpecifiedOrganization}`);
         }
       } else {
+        core.info(`Obtaining application installation for repository: ${repository}`);
+
         // fallback to getting a repository installation
-        const repository = process.env['GITHUB_REPOSITORY']
-          , repoParts = repository.split('/')
-          ;
-        installation = await app.getRepositoryInstallation(repoParts[0], repoParts[1]);
+        const installation = await app.getRepositoryInstallation(repoParts[0], repoParts[1]);
         if (installation && installation.id) {
           installationId = installation.id;
         } else {

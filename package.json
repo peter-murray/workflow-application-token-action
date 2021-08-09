@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "test": "mocha --recursive \"lib/**/*.test.js\"",
-        "build": "npx @vercel/ncc@0.28.5 build -m index.js"
+        "build": "npx @vercel/ncc@0.29.0 build -m index.js"
     },
     "keywords": [
         "github-actions",
