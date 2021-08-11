@@ -54,12 +54,12 @@ _Note: the private keys can and should be rotated periodically to limit the risk
 
 
 ### Install the GitHub Application
-Once you have the GitHub Application defined, you will need to install the application on the target repository or 
+Once you have the GitHub Application defined, you will need to install the application on the target organization or repository/ 
 repositories that you want it to have access to. These will be any repositories that you want to gather information 
 from or want the application to modify as per the scopes that were defined when the application was installed.
 
-_Note: The GitHub Application will need to be installed on the repository that you are executing the GitHub Actions 
-workflow from, as the implementation requires this before it will generate access tokens for you_.
+_Note: The GitHub Application will need to be installed on the organization and or repository that you are executing 
+the GitHub Actions workflow from, as the implementation requires this to be able to generate the access tokens_.
 
 
 ### Using the GitHub Action in a Workflow
@@ -74,7 +74,7 @@ generates for you or Base64 encode it in the secret.
 
 * `application_id`: The GitHub Application ID that you wil be getting the access token for
 * `application_private_key`: A private key generated for the GitHub Application so that you can authenticate (PEM format or base64 encoded)
-
+* `organization`: An optional organization name if the GitHub Application is installed at the Organization level (instead of the repository).
 ```yaml
 
 jobs:
