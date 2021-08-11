@@ -1,0 +1,42 @@
+# Tests this action failure by the application not being installed on the organization
+
+name: Test Failure - organization - not installed
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  test_failure:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    
+    outputs:
+      action_step_outcome: ${{ steps.use_action.outcome }}
+      action_step_conclusion: ${{ steps.use_action.conclusion }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - name: Use action 
+        id: use_action
+        uses: ./
+        with:
+          application_id: ${{ secrets.APPLICATION_ID_NOT_INSTALLED }}
+          application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY_NOT_INSTALLED }}
+          organization: devopsventures
+        
+  validate_results:
+    needs: test_failure
+    
+    runs-on: ubuntu-latest   
+    
+    steps:
+      - name: Validate failure
+        if: needs.test_failure.outputs.action_step_outcome != 'failure'
+        run: |
+          echo "Outcome: ${{ needs.test_failure.outputs.action_step_outcome }}"
+          echo "Conclusion: ${{ needs.test_failure.outputs.action_step_conclusion }}"
+          echo "Outcome should have been failure for an application that is not installed."
+          exit 1

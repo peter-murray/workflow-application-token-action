@@ -1,9 +1,10 @@
 # Tests this action success by the application already being installed on the repository
 
-name: Test Success - installed action
+name: Test Success - repository - installed
 
 on:
   push:
+  workflow_dispatch:
 
 jobs:
   test:
