@@ -74,6 +74,7 @@ generates for you or Base64 encode it in the secret.
 
 * `application_id`: The GitHub Application ID that you wil be getting the access token for
 * `application_private_key`: A private key generated for the GitHub Application so that you can authenticate (PEM format or base64 encoded)
+* `permissions`: The permissions to request e.g. `issues:read,secrets:write,packages:read`. Defaults to all permissions available to the application
 * `organization`: An optional organization name if the GitHub Application is installed at the Organization level (instead of the repository).
 ```yaml
 
@@ -88,6 +89,7 @@ jobs:
         with:
           application_id: ${{ secrets.APPLICATION_ID }}
           application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY }}
+          permissions: "contents:write"
         
       - name: Use Application Token to create a release
         uses: actions/create-release@v1
