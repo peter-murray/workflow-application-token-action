@@ -48,7 +48,17 @@ async function run() {
       }
       
       if (installationId) {
-        const accessToken = await app.getInstallationAccessToken(installationId);
+        const permissions = {};
+        // Build up the list of requested permissions
+        let permissionInput = core.getInput("permissions");
+        if (permissionInput){
+          for (let p of permissionInput.split(",")){
+            let [pName, pLevel] = p.split(":", 2);
+            permissions[pName.trim()] = pLevel.trim();
+          }
+        }
+
+        const accessToken = await app.getInstallationAccessToken(installationId, permissions);
 
         // Register the secret to mask it in the output
         core.setSecret(accessToken.token);
