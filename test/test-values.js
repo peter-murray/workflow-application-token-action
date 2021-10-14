@@ -30,16 +30,7 @@ module.exports = {
 }
 
 function loadData() {
-  const platform = os.platform();
-
-  let testDataFile;
-  if (platform === 'win32') {
-    testDataFile = path.join(process.env.LOCALAPPDATA, '.github_application');
-  }
-
-  if (platform === 'darwin') {
-    testDataFile = path.join(process.env.HOME, '.github_application');
-  }
+  const testDataFile = getTestDataFileName();
 
   let data = null;
   if (fs.existsSync(testDataFile)) {
@@ -54,7 +45,20 @@ function loadData() {
   return data;
 }
 
+function getTestDataFileName() {
+  if (os.platform() === 'win32') {
+    return path.join(process.env.LOCALAPPDATA, '.github_application');
+  } else {
+    return path.join(process.env.HOME, '.github_application');
+  }
+}
+
 function getAppTestValue(name, key) {
+  if (!data) {
+    console.error(`No data for tests has been loaded, please ensure you have a valid file for testing at ${getTestDataFileName()}.`);
+    return null;
+  }
+
   const application = data[name];
 
   if (application) {

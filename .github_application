@@ -1,0 +1,11 @@
+{
+  "test": {
+    "applicationId": 123456,
+    "privateKey": "-----BEGIN RSA PRIVATE KEY-----\nk3y_g03s_her3\n-----END RSA PRIVATE KEY-----\n",
+    "repo": {
+      "owner": "your-org-name",
+      "repo": "your-repo-name"
+    },
+    "org": "octodemo"
+  }
+}
