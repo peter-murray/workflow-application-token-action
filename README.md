@@ -74,8 +74,11 @@ generates for you or Base64 encode it in the secret.
 
 * `application_id`: The GitHub Application ID that you wil be getting the access token for
 * `application_private_key`: A private key generated for the GitHub Application so that you can authenticate (PEM format or base64 encoded)
-* `permissions`: The permissions to request e.g. `issues:read,secrets:write,packages:read`. Defaults to all permissions available to the application
+* `permissions`: The optional limited permissions to request, specifying this allows you to request a subset of the permissions for the underlying GitHub Application. Defaults to all permissions available to the GitHub Application when not specified. Must be provided in a comma separated list of token permissions e.g. `issues:read, secrets:write, packages:read`
 * `organization`: An optional organization name if the GitHub Application is installed at the Organization level (instead of the repository).
+
+#### Examples
+Get a token with all the permissions of the GitHub Application:
 ```yaml
 
 jobs:
@@ -89,7 +92,54 @@ jobs:
         with:
           application_id: ${{ secrets.APPLICATION_ID }}
           application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY }}
-          permissions: "contents:write"
+        
+      - name: Use Application Token to create a release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
+        with:
+          ....
+```
+
+Get a token with a limited subset of the permissions of the Github Application, in this case just the `actions:write` permission;
+```yaml
+
+jobs:
+  get-temp-token:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get Token
+        id: get_workflow_token
+        uses: peter-murray/workflow-application-token-action@v1
+        with:
+          application_id: ${{ secrets.APPLICATION_ID }}
+          application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY }}
+          permissions: "actions:write"
+        
+      - name: Use Application Token to create a release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
+        with:
+          ....
+```
+
+Get a token with all the permissions of the Github Application that is installed on an organization;
+```yaml
+
+jobs:
+  get-temp-token:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get Token
+        id: get_workflow_token
+        uses: peter-murray/workflow-application-token-action@v1
+        with:
+          application_id: ${{ secrets.APPLICATION_ID }}
+          application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY }}
+          organization: octodemo
         
       - name: Use Application Token to create a release
         uses: actions/create-release@v1
