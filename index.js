@@ -51,11 +51,12 @@ async function run() {
         const permissions = {};
         // Build up the list of requested permissions
         let permissionInput = core.getInput("permissions");
-        if (permissionInput){
+        if (permissionInput) {
           for (let p of permissionInput.split(",")){
             let [pName, pLevel] = p.split(":", 2);
             permissions[pName.trim()] = pLevel.trim();
           }
+          core.info(`Requesting limitation on GitHub Application permissions to only: ${JSON.stringify(permissions)}`);
         }
 
         const accessToken = await app.getInstallationAccessToken(installationId, permissions);

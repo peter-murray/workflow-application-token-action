@@ -1,0 +1,10 @@
+{
+  "name": "Workspace",
+  "image": "ghcr.io/octodemo/container-nodejs-development:base-latest",
+  "extensions": [
+    "dbaeumer.vscode-eslint",
+    "redhat.vscode-yaml",
+    "swellaby.node-pack"
+  ],
+  "postCreateCommand": "npm install"
+}
