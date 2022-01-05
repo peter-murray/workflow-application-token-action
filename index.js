@@ -67,7 +67,7 @@ async function run() {
         core.info(JSON.stringify(accessToken));
         core.info(`Successfully generated an access token for application.`)
       } else {
-        fail('No installation of the specified GitHub application was abel to be retrieved');
+        fail('No installation of the specified GitHub application was able to be retrieved');
       }
     } catch (err) {
       fail(err);
