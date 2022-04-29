@@ -101,7 +101,7 @@ async function run() {
     const crToken = await app.getInstallationAccessToken(installationId, {'checks': 'write'});
     const octokit = new github.getOctokit(crToken);
 
-    const action = cf.check_run_id ? 'update' : 'create'
+    const action = cr.check_run_id ? 'update' : 'create'
     check = await octokit.rest.checks[action](cr);
     core.info(`Check suite ${action}: ${check.data.id}`);
     core.setOutput('check_run_id', check.data.id);
