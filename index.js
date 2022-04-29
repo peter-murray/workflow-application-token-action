@@ -86,7 +86,7 @@ async function run() {
 
   // Check runs
   let cr = Object.fromEntries(
-    ['check_run_id', 'name', 'status', 'conclusion', 'details_url']
+    ['check_run_id', 'head_sha', 'name', 'status', 'conclusion', 'details_url']
     .map(f => [f, core.getInput(f)])
   );
   cr.output = Object.fromEntries(

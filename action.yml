@@ -31,6 +31,9 @@ inputs:
   check_run_id:
     description: The unique identifier of the check run.
     required: false
+  head_sha:
+    description: The SHA of the commit.
+    required: false
   name:
     description: The name of the check. For example, "code-coverage".
     required: false
