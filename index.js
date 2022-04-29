@@ -96,12 +96,16 @@ async function run() {
   cr.owner = repoParts[0];
   cr.repo = repoParts[1];
 
-  if (cr.check_run_id || cr.summary) {
+  if (cr.check_run_id || cr.output.summary) {
     const crToken = await app.getInstallationAccessToken(installationId, {'checks': 'write'});
     const octokit = new github.getOctokit(crToken);
 
-    check = await octokit.rest.checks[cf.check_run_id ? 'update' : 'create'](cr);
+    const action = cf.check_run_id ? 'update' : 'create'
+    check = await octokit.rest.checks[action](cr);
+    core.info(`Check suite ${action}: ${check.data.id}`);
     core.setOutput('check_run_id', check.data.id);
+  } else {
+    core.info(`Skipped check suite.`);
   }
 }
 run().catch(fail)
