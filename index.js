@@ -99,7 +99,7 @@ async function run() {
 
   if (cr.check_run_id || cr.output.summary) {
     const crToken = await app.getInstallationAccessToken(installationId, {'checks': 'write'});
-    const octokit = new github.getOctokit(crToken);
+    const octokit = new github.getOctokit(crToken.token);
 
     const action = cr.check_run_id ? 'update' : 'create'
     check = await octokit.rest.checks[action](cr);
