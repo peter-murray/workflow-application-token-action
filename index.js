@@ -55,7 +55,7 @@ async function run() {
   }
 
   if (!installationId) {
-    fail('No installation of the specified GitHub application was abel to be retrieved');
+    fail(null, 'No installation of the specified GitHub application was abel to be retrieved');
   }
 
   const permissions = {};
@@ -69,14 +69,22 @@ async function run() {
     core.info(`Requesting limitation on GitHub Application permissions to only: ${JSON.stringify(permissions)}`);
   }
 
-  const accessToken = await app.getInstallationAccessToken(installationId, permissions);
+  if (Object.keys(permissions).length > 0 || core.getBooleanInput('print')) {
+    const accessToken = await app.getInstallationAccessToken(installationId, permissions);
 
-  // Register the secret to mask it in the output
-  core.setSecret(accessToken.token);
-  core.setOutput('token', accessToken.token);
-  core.info(JSON.stringify(accessToken));
-  core.info(`Successfully generated an access token for application.`);
+    // We print what permissions are available
+    if (!permissionInput) {
+      fail(null, `Please specify permissions: ${accessToken.permissions}`)
+    }
 
+    // Register the secret to mask it in the output
+    core.setSecret(accessToken.token);
+    core.setOutput('token', accessToken.token);
+    core.info(JSON.stringify(accessToken));
+    core.info(`Successfully generated an access token for application.`);
+  }
+
+  // Check runs
   let cr = Object.fromEntries(
     ['check_run_id', 'name', 'status', 'conclusion', 'details_url']
     .map(f => [f, core.getInput(f)])

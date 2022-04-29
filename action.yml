@@ -17,6 +17,10 @@ inputs:
     description: The permissions to request e.g. issues:read,secrets:write,packages:read. Defaults to all available permissions
     required: false
 
+  print:
+    description: Show all available permissions
+    required: false
+
   organization:
     description: The GitHub Organization to get the application installation for, if not specified will use the current repository instead
     required: false
