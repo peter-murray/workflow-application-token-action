@@ -88,7 +88,7 @@ async function run() {
   cr.owner = repoParts[0];
   cr.repo = repoParts[1];
 
-  if (cr.head_sha !== '') {
+  if (cr.check_run_id || cr.summary) {
     const crToken = await app.getInstallationAccessToken(installationId, {'checks': 'write'});
     const octokit = new github.getOctokit(crToken);
 

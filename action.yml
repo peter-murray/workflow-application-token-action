@@ -22,6 +22,7 @@ inputs:
     required: false
 
   # Check run integration
+  # Either `check_run_id` or `summary` has to be specified
 
   check_run_id:
     description: The unique identifier of the check run.
