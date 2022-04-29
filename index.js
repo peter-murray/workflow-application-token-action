@@ -1,5 +1,6 @@
 const core = require('@actions/core')
 const githubApplication = require('./lib/github-application')
+const github = require('@actions/github');
 
 function fail(err, message) {
   core.error(err);
