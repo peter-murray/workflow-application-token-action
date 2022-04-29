@@ -14,16 +14,47 @@ inputs:
     required: true
 
   permissions:
-    description: "The permissions to request e.g. issues:read,secrets:write,packages:read. Defaults to all available permissions"
+    description: The permissions to request e.g. issues:read,secrets:write,packages:read. Defaults to all available permissions
     required: false
 
   organization:
     description: The GitHub Organization to get the application installation for, if not specified will use the current repository instead
     required: false
 
+  # Check run integration
+
+  check_run_id:
+    description: The unique identifier of the check run.
+    required: false
+  name:
+    description: The name of the check. For example, "code-coverage".
+    required: false
+  status:
+    description: The current status. Can be one of queued, in_progress, or completed.
+    required: false
+  conclusion:
+    description: Required if you provide completed_at or a status of completed. The final conclusion of the check. Can be one of action_required, cancelled, failure, neutral, success, skipped, stale, or timed_out.
+    required: false
+  details_url:
+    description: The URL of the integrator's site that has the full details of the check.
+    required: false
+
+  title:
+    description: Title
+    required: false
+  summary:
+    description: Can contain Markdown.
+    required: false
+  text:
+    description: Can contain Markdown.
+    required: false
+
 outputs:
   token:
     description: A valid token representing the Application that can be used to access what the Application has been scoped to access.
+
+  check_run_id:
+    description: If check run information was provided this will be the corresponding id.
 
 runs:
   using: node12
