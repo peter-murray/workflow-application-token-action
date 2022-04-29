@@ -5,14 +5,26 @@ name: Test Success - organization - installed
 on:
   push:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: The name of the branch to checkout for the action
+        required: true
+        default: main
 
 jobs:
   test:
     runs-on: ubuntu-latest
     
     steps:
+      - name: Checkout specified branch
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.branch }}
+          
       - name: Checkout
-        uses: actions/checkout@v2
+        if: github.event_name != 'workflow_dispatch'
+        uses: actions/checkout@v3
         
       - name: Use action 
         id: use_action
