@@ -13,6 +13,21 @@ inputs:
     description: GitHub Application ID value.
     required: true
 
+<<<<<<< HEAD
+=======
+  permissions:
+    description: "The permissions to request e.g. issues:read,secrets:write,packages:read. Defaults to all available permissions"
+    required: false
+
+  organization:
+    description: The GitHub Organization to get the application installation for, if not specified will use the current repository instead
+    required: false
+
+  github_api_base_url:
+    description: The GitHub API base URL to use, no needed it working within the same GitHub instance as the workflow as it will get picked up from the environment
+    required: false
+
+>>>>>>> 0004044... Adding ability to specify the Github API base URL
 outputs:
   token:
     description: A valid token representing the Application that can be used to access what the Application has been scoped to access.
