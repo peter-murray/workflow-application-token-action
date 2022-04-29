@@ -88,11 +88,17 @@ async function run() {
   // Check runs
   let cr = Object.fromEntries(
     ['check_run_id', 'head_sha', 'name', 'status', 'conclusion', 'details_url']
-    .map(f => [f, core.getInput(f)])
+    .map(f => {
+      value = core.getInput(f)
+      return value === '' ? null : [f, value]
+    }).filter(f => !!f)
   );
   cr.output = Object.fromEntries(
     ['title', 'summary', 'text']
-    .map(f => [f, core.getInput(f)])
+    .map(f => {
+      value = core.getInput(f)
+      return value === '' ? null : [f, value]
+    }).filter(f => !!f)
   );
   cr.owner = repoParts[0];
   cr.repo = repoParts[1];
