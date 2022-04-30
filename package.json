@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --recursive \"lib/**/*.test.js\"",
-    "build": "npx @vercel/ncc@0.29.0 build -m index.js"
+    "build": "npx @vercel/ncc@0.33.4 build -m index.js"
   },
   "keywords": [
     "github-actions",
@@ -20,8 +20,8 @@
     "url": "https://github.com/peter-murray/workflow-application-token-action"
   },
   "dependencies": {
-    "@actions/core": "^1.6.0",
-    "@actions/github": "^5.0.0",
+    "@actions/core": "^1.7.0",
+    "@actions/github": "^5.0.1",
     "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {

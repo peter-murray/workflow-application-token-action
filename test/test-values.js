@@ -60,6 +60,7 @@ function getAppTestValue(name, key) {
   }
 
   const application = data[name];
+  // console.log(`DATA:: ${JSON.stringify(application)}`);
 
   if (application) {
     if (key) {

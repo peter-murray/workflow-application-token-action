@@ -8,8 +8,9 @@ async function run() {
   try {
     const privateKey = getRequiredInputValue('application_private_key')
       , applicationId = getRequiredInputValue('application_id')
+      , githubApiBaseUrl = core.getInput('github_api_base_url') || process.env['GITHUB_API_URL'] || 'https://api.github.com'
       ;
-    app = await githubApplication.create(privateKey, applicationId);
+    app = await githubApplication.create(privateKey, applicationId, githubApiBaseUrl);
   } catch(err) {
     fail(err, 'Failed to initialize GitHub Application connection using provided id and private key');
   }
@@ -46,7 +47,7 @@ async function run() {
           fail(null, `GitHub Application is not installed on repository: ${repository}`);
         }
       }
-      
+
       if (installationId) {
         const permissions = {};
         // Build up the list of requested permissions
@@ -67,7 +68,7 @@ async function run() {
         core.info(JSON.stringify(accessToken));
         core.info(`Successfully generated an access token for application.`)
       } else {
-        fail('No installation of the specified GitHub application was abel to be retrieved');
+        fail('No installation of the specified GitHub application was able to be retrieved.');
       }
     } catch (err) {
       fail(err);
@@ -78,7 +79,7 @@ run();
 
 function fail(err, message) {
   core.error(err);
-  
+
   if (message) {
     core.setFailed(message);
   } else {
