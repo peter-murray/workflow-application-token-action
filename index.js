@@ -10,7 +10,7 @@ async function run() {
       , applicationId = getRequiredInputValue('application_id')
       , githubApiBaseUrl = core.getInput('github_api_base_url') || process.env['GITHUB_API_URL'] || 'https://api.github.com'
       ;
-    app = await githubApplication.create(githubApiBaseUrl, privateKey, applicationId);
+    app = await githubApplication.create(privateKey, applicationId, githubApiBaseUrl);
   } catch(err) {
     fail(err, 'Failed to initialize GitHub Application connection using provided id and private key');
   }
@@ -68,7 +68,7 @@ async function run() {
         core.info(JSON.stringify(accessToken));
         core.info(`Successfully generated an access token for application.`)
       } else {
-        fail('No installation of the specified GitHub application was abel to be retrieved');
+        fail('No installation of the specified GitHub application was able to be retrieved.');
       }
     } catch (err) {
       fail(err);
