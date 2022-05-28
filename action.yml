@@ -1,5 +1,4 @@
 ---
-
 name: workflow-application-token-action
 description: Obtain a temporary access token for a GitHub Application when running in a GitHub Actions Workflow.
 author: peter-murray
@@ -23,6 +22,10 @@ inputs:
 
   github_api_base_url:
     description: The GitHub API base URL to use, no needed it working within the same GitHub instance as the workflow as it will get picked up from the environment
+    required: false
+
+  timeout:
+    description: The length of time the token is valid for from the moment it's created. Defaults to 60 seconds.
     required: false
 
 outputs:
