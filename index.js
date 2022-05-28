@@ -12,7 +12,6 @@ async function run() {
       , timeout = core.getInput('timeout')
       ;
     app = await githubApplication.create(privateKey, applicationId, githubApiBaseUrl, timeout);
-      ;
   } catch(err) {
     fail(err, 'Failed to initialize GitHub Application connection using provided id and private key');
   }
