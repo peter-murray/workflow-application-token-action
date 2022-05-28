@@ -21,6 +21,10 @@ inputs:
     description: The GitHub Organization to get the application installation for, if not specified will use the current repository instead
     required: false
 
+  timeout:
+    description: The length of time the token is valid for from the moment it's created. Defaults to 60 seconds.
+    required: false
+
 outputs:
   token:
     description: A valid token representing the Application that can be used to access what the Application has been scoped to access.
