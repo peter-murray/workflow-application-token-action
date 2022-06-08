@@ -22,6 +22,7 @@
   "dependencies": {
     "@actions/core": "^1.7.0",
     "@actions/github": "^5.0.1",
+    "https-proxy-agent": "^5.0.1",
     "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {
