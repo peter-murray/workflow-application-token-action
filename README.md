@@ -149,6 +149,27 @@ jobs:
         with:
           ....
 ```
+### Proxy
+
+This action detects the environment variable `HTTPS_PROXY` (or lowercase `https_proxy`). If defined, the request will be using its value for connecting to the GitHub instance.  
+
+```yaml
+env:
+  https_proxy: ${{ secrets.HTTPS_PROXY }}
+jobs:
+  get-temp-token:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get Token
+        id: get_workflow_token
+        uses: peter-murray/workflow-application-token-action@v1
+        with:
+          application_id: ${{ secrets.APPLICATION_ID }}
+          application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY }}
+          organization: octodemo
+          ....
+```
 
 ### References
 https://docs.github.com/en/developers/apps/authenticating-with-github-apps#authenticating-as-an-installation
