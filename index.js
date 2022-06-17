@@ -1,6 +1,7 @@
 const core = require('@actions/core')
 const githubApplication = require('./lib/github-application')
 const github = require('@actions/github');
+const fs = require('fs');
 
 function fail(err, message) {
   core.error(err);
@@ -100,6 +101,14 @@ async function run() {
       return value === '' ? null : [f, value]
     }).filter(f => !!f)
   );
+  const file = core.getInput('file')
+  if (file !== '') {
+    try {
+      cr.output.text = fs.readFileSync(file, 'utf8');
+    } catch (err) {
+      core.error(err);
+    }
+  }
   cr.owner = repoParts[0];
   cr.repo = repoParts[1];
 

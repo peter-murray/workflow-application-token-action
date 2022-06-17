@@ -20,7 +20,7 @@ inputs:
   print:
     description: Show all available permissions
     required: false
-    default: false
+    default: "false"
 
   organization:
     description: The GitHub Organization to get the application installation for, if not specified will use the current repository instead
@@ -55,6 +55,9 @@ inputs:
     description: Can contain Markdown.
     required: false
   text:
+    description: Can contain Markdown.
+    required: false
+  file:
     description: Can contain Markdown.
     required: false
 
