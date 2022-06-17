@@ -109,7 +109,7 @@ async function run() {
       core.error(err);
     }
   }
-  if (cr.output.text !== "") {
+  if (cr.output.text) {
     cr.output.text = cr.output.text.substr(0, 65530)
   }
   cr.owner = repoParts[0];
