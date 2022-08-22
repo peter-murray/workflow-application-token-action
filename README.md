@@ -64,7 +64,7 @@ the GitHub Actions workflow from, as the implementation requires this to be able
 
 ### Using the GitHub Action in a Workflow
 
-To use the action in a worklow, it is recommended that you store the GitHub Application Private key in GitHub Secrets.
+To use the action in a workflow, it is recommended that you store the GitHub Application Private key in GitHub Secrets.
 This can be done at a repository or organization level (provided that the actions workflow has access to the secret).
 
 When storing the Private key, you can store the raw PEM encoded certificate contents that the GitHub Application
@@ -76,7 +76,7 @@ generates for you or Base64 encode it in the secret.
 * `application_private_key`: A private key generated for the GitHub Application so that you can authenticate (PEM format or base64 encoded)
 * `permissions`: The optional limited permissions to request, specifying this allows you to request a subset of the permissions for the underlying GitHub Application. Defaults to all permissions available to the GitHub Application when not specified. Must be provided in a comma separated list of token permissions e.g. `issues:read, secrets:write, packages:read`
 * `organization`: An optional organization name if the GitHub Application is installed at the Organization level (instead of the repository).
-* `github_api_base_url`: An optional URl to the GitHub API, this will be read and loaded from the runner environment by default, but you might be bridging access to a secondary GHES instance or from GHES to GHEC, you can utilize this to make sure the Octokit library is talking to the right GitHub instance.
+* `github_api_base_url`: An optional URL to the GitHub API, this will be read and loaded from the runner environment by default, but you might be bridging access to a secondary GHES instance or from GHES to GHEC, you can utilize this to make sure the Octokit library is talking to the right GitHub instance.
 
 #### Examples
 Get a token with all the permissions of the GitHub Application:
@@ -102,7 +102,7 @@ jobs:
           ....
 ```
 
-Get a token with a limited subset of the permissions of the Github Application, in this case just the `actions:write` permission;
+Get a token with a limited subset of the permissions of the Github Application, in this case just the `actions:write` permission:
 ```yaml
 
 jobs:
@@ -126,7 +126,7 @@ jobs:
           ....
 ```
 
-Get a token with all the permissions of the Github Application that is installed on an organization;
+Get a token with all the permissions of the Github Application that is installed on an organization:
 ```yaml
 
 jobs:
