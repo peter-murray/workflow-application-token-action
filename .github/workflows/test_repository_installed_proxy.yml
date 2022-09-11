@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      squid_proxy:
+      squid:
         image: ubuntu/squid
         ports:
           - 3128/tcp
@@ -41,7 +41,7 @@ jobs:
         with:
           application_id: ${{ secrets.APPLICATION_ID }}
           application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY }}
-          https_proxy: http://localhost:${{ job.services.squid_proxy.ports['3128'] }}
+          https_proxy: http://squid:${{ job.services.squid.ports['3128'] }}
 
       - name: Show Squid Logs
         run: |
