@@ -38,7 +38,12 @@ jobs:
       - name: Start Squid Proxy container
         run: |
           mkdir ${{ github.workspace }}/squid
-          docker run -dit --name squid -p 3128:3128 -v ${{ github.workspace }}/squid:/var/log/squid ubuntu/squid:latest
+          sudo chown proxy:proxy ${{ github.workspace }}/squid
+          docker run -dit --name squid -p 3128:3128 -v ${{ github.workspace }}/test/squid.conf:/etc/squid/squid.conf -v ${{ github.workspace }}/squid:/var/log/squid ubuntu/squid:latest
+          sleep 5
+          docker logs squid
+          docker inspect squid
+          curl http://localhost:3128
 
       - name: Use action
         id: use_action
@@ -51,9 +56,9 @@ jobs:
 
       - name: Show Squid Logs and stop container
         run: |
-          ls -la ${{ github.workspace }}/squid
           docker stop squid
           ls -la ${{ github.workspace }}/squid
+          sudo cat ${{ github.workspace }}/squid/access.log
 
       - name: Use token to read details
         uses: actions/github-script@v2
