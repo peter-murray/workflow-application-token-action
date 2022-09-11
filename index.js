@@ -9,8 +9,9 @@ async function run() {
     const privateKey = getRequiredInputValue('application_private_key')
       , applicationId = getRequiredInputValue('application_id')
       , githubApiBaseUrl = core.getInput('github_api_base_url') || process.env['GITHUB_API_URL'] || 'https://api.github.com'
+      , httpsProxy = core.getInput('https_proxy')
       ;
-    app = await githubApplication.create(privateKey, applicationId, githubApiBaseUrl);
+    app = await githubApplication.create(privateKey, applicationId, githubApiBaseUrl, null, httpsProxy);
   } catch(err) {
     fail(err, 'Failed to initialize GitHub Application connection using provided id and private key');
   }

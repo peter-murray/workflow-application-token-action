@@ -77,6 +77,7 @@ generates for you or Base64 encode it in the secret.
 * `permissions`: The optional limited permissions to request, specifying this allows you to request a subset of the permissions for the underlying GitHub Application. Defaults to all permissions available to the GitHub Application when not specified. Must be provided in a comma separated list of token permissions e.g. `issues:read, secrets:write, packages:read`
 * `organization`: An optional organization name if the GitHub Application is installed at the Organization level (instead of the repository).
 * `github_api_base_url`: An optional URl to the GitHub API, this will be read and loaded from the runner environment by default, but you might be bridging access to a secondary GHES instance or from GHES to GHEC, you can utilize this to make sure the Octokit library is talking to the right GitHub instance.
+* `https_proxy`: An optional proxy to use for connecting with the GitHub instance. If the runner has `HTTP_PROXY` or `HTTPS_PROXY` specified as environment variables it will attempt to use those if this parameter is not specified.
 
 #### Examples
 Get a token with all the permissions of the GitHub Application:
@@ -147,6 +148,29 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
         with:
+          ....
+```
+### Proxy
+
+You can specify a proxy server directory using the `https_proxy` parameter in your `with` settings, or by falling back to 
+using any environment variables used to provide a proxy reference; `HTTP_PROXY` or `HTTPS_PROXY` (or lowercase variants e.g. `http_proxy`).
+If defined, the request will use the proxy to route the connection to the GitHub instance.  
+
+```yaml
+
+jobs:
+  get-temp-token:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get Token
+        id: get_workflow_token
+        uses: peter-murray/workflow-application-token-action@v1
+        with:
+          application_id: ${{ secrets.APPLICATION_ID }}
+          application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY }}
+          organization: octodemo
+          https_proxy: http://my-squid-proxy:3128
           ....
 ```
 
