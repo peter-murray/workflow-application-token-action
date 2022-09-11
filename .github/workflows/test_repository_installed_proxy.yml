@@ -21,7 +21,8 @@ jobs:
         ports:
           - 3128/tcp
         volumes:
-          - '${{ github.workspace }}/squid:/var/log/squid'
+          - '${{ github.workspace }}:/var/log/squid'
+        options: --dns 8.8.8.8
 
     steps:
       - name: Checkout specified branch
@@ -45,7 +46,7 @@ jobs:
 
       - name: Show Squid Logs
         run: |
-          ls -la ${{ github.workspace }}/squid
+          ls -la ${{ github.workspace }}
 
       - name: Use token to read details
         uses: actions/github-script@v2
