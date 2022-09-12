@@ -1,0 +1,69 @@
+# Tests this action success by the application already being installed on the repository
+
+name: Test Success - repository - installed - with proxy
+
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: The name of the branch to checkout for the action
+        required: true
+        default: main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+#    services:
+#      squid:
+#        image: ubuntu/squid
+#        ports:
+#          - 3128/tcp
+#        volumes:
+#          - '${{ github.workspace }}:/var/log/squid'
+#        options: --dns 8.8.8.8
+
+    steps:
+      - name: Checkout specified branch
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.branch }}
+          
+      - name: Checkout
+        if: github.event_name != 'workflow_dispatch'
+        uses: actions/checkout@v3
+
+      - name: Start Squid Proxy container
+        run: |
+          mkdir ${{ github.workspace }}/squid
+          sudo chown proxy:proxy ${{ github.workspace }}/squid
+          docker run -dit --name squid -p 3128:3128 -v ${{ github.workspace }}/test/squid.conf:/etc/squid/squid.conf -v ${{ github.workspace }}/squid:/var/log/squid ubuntu/squid:latest
+          sleep 5
+          docker logs squid
+          docker inspect squid
+          curl http://localhost:3128
+
+      - name: Use action
+        id: use_action
+        continue-on-error: true
+        uses: ./
+        with:
+          application_id: ${{ secrets.APPLICATION_ID }}
+          application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY }}
+          https_proxy: http://localhost:3128
+
+      - name: Show Squid Logs and stop container
+        run: |
+          docker stop squid
+          ls -la ${{ github.workspace }}/squid
+          sudo cat ${{ github.workspace }}/squid/access.log
+
+      - name: Use token to read details
+        uses: actions/github-script@v2
+        with:
+          github-token: ${{ steps.use_action.outputs.token }}
+          script: |
+            const repo = await github.repos.get(context.repo);
+            console.log(JSON.stringify(repo, null, 2));

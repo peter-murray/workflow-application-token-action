@@ -25,12 +25,16 @@ inputs:
     description: The GitHub API base URL to use, no needed it working within the same GitHub instance as the workflow as it will get picked up from the environment
     required: false
 
+  https_proxy:
+    description: Option proxy server for making the requests
+    required: false
+
 outputs:
   token:
     description: A valid token representing the Application that can be used to access what the Application has been scoped to access.
 
 runs:
-  using: node12
+  using: node16
   main: dist/index.js
 
 branding:
