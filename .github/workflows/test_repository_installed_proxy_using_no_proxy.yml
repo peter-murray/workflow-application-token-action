@@ -68,7 +68,7 @@ jobs:
         with:
           github-token: ${{ steps.use_action.outputs.token }}
           script: |
-            const repo = await github.repos.get(context.repo);
+            const repo = await github.rest.repos.get(context.repo);
             console.log(JSON.stringify(repo, null, 2));
 
   test_no_proxy_acknowledged:
@@ -127,5 +127,5 @@ jobs:
         with:
           github-token: ${{ steps.use_action.outputs.token }}
           script: |
-            const repo = await github.repos.get(context.repo);
+            const repo = await github.rest.repos.get(context.repo);
             console.log(JSON.stringify(repo, null, 2));

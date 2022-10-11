@@ -39,5 +39,5 @@ jobs:
         with:
           github-token: ${{ steps.use_action.outputs.token }}
           script: |
-            const repo = await github.repos.get({owner: 'octodemo', repo: 'demo-bootstrap'});
+            const repo = await github.rest.repos.get({owner: 'octodemo', repo: 'demo-bootstrap'});
             console.log(JSON.stringify(repo, null, 2));
