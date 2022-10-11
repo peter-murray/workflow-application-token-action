@@ -84,7 +84,6 @@ jobs:
     #        options: --dns 8.8.8.8
 
     env:
-      https_proxy: "http://localhost:3128"
       no_proxy: "api.github.com"
 
     steps:
@@ -112,6 +111,8 @@ jobs:
         id: use_action
         continue-on-error: true
         uses: ./
+        env:
+          https_proxy: "http://localhost:3128"
         with:
           application_id: ${{ secrets.APPLICATION_ID }}
           application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY }}
