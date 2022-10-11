@@ -1,6 +1,6 @@
 # Tests this action success by the application already being installed on the repository
 
-name: Test Success - repository - installed - with proxy adn no_proxy
+name: Test Success - repository - installed - with proxy and no_proxy
 
 on:
   push:
@@ -64,7 +64,7 @@ jobs:
           sudo cat ${{ github.workspace }}/squid/access.log
 
       - name: Use token to read details
-        uses: actions/github-script@v2
+        uses: actions/github-script@v6
         with:
           github-token: ${{ steps.use_action.outputs.token }}
           script: |
@@ -123,7 +123,7 @@ jobs:
           sudo cat ${{ github.workspace }}/squid/access.log
 
       - name: Use token to read details
-        uses: actions/github-script@v2
+        uses: actions/github-script@v6
         with:
           github-token: ${{ steps.use_action.outputs.token }}
           script: |
