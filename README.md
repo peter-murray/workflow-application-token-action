@@ -150,11 +150,12 @@ jobs:
         with:
           ....
 ```
+
 ### Proxy
 
-You can specify a proxy server directory using the `https_proxy` parameter in your `with` settings, or by falling back to 
+You can specify a proxy server directory using the `https_proxy` parameter in your `with` settings, or by falling back to
 using any environment variables used to provide a proxy reference; `HTTP_PROXY` or `HTTPS_PROXY` (or lowercase variants e.g. `http_proxy`).
-If defined, the request will use the proxy to route the connection to the GitHub instance.  
+If defined, the request will use the proxy to route the connection to the GitHub instance.
 
 ```yaml
 
@@ -173,6 +174,16 @@ jobs:
           https_proxy: http://my-squid-proxy:3128
           ....
 ```
+
+In version `2.1.0` of this action support has been added for `no_proxy` environment variables that might be present in the workflows or actions runner.
+
+If the `https_proxy` input variable is specified for the action, then any `no_proxy` setting will be ignored as the proxy in this case has been explicitly set and
+this action views that as being entirely intentional.
+
+If on the other hand the proxy server is being detected using environment variables, `http_proxy`, `HTTP_PROXY`, `https_proxy`, `HTTPS_PROXY` and `no_proxy` is present
+then it will be parsed for hostname matches as to whether or not to use the proxy when access the GitHub API.
+
+The format that is supported for `no_proxy` environment variable is a comma separated list of host names, e.g. `api.github.com,www.google.com` of when to not use the proxy server.
 
 ### References
 https://docs.github.com/en/developers/apps/authenticating-with-github-apps#authenticating-as-an-installation
