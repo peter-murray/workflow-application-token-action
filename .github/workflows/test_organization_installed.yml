@@ -14,19 +14,19 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout specified branch
         if: github.event_name == 'workflow_dispatch'
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.inputs.branch }}
-          
+
       - name: Checkout
         if: github.event_name != 'workflow_dispatch'
         uses: actions/checkout@v3
-        
-      - name: Use action 
+
+      - name: Use action
         id: use_action
         uses: ./
         with:
@@ -35,9 +35,9 @@ jobs:
           organization: octodemo
 
       - name: Use token to read details
-        uses: actions/github-script@v2
+        uses: actions/github-script@v6
         with:
           github-token: ${{ steps.use_action.outputs.token }}
           script: |
-            const repo = await github.repos.get({owner: 'octodemo', repo: 'demo-bootstrap'});
+            const repo = await github.rest.repos.get({owner: 'octodemo', repo: 'demo-bootstrap'});
             console.log(JSON.stringify(repo, null, 2));

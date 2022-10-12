@@ -8,7 +8,7 @@ async function run() {
   try {
     const privateKey = getRequiredInputValue('application_private_key')
       , applicationId = getRequiredInputValue('application_id')
-      , githubApiBaseUrl = core.getInput('github_api_base_url') || process.env['GITHUB_API_URL'] || 'https://api.github.com'
+      , githubApiBaseUrl = core.getInput('github_api_base_url')
       , httpsProxy = core.getInput('https_proxy')
       ;
     app = await githubApplication.create(privateKey, applicationId, githubApiBaseUrl, null, httpsProxy);

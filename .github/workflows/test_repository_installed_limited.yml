@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Use action
         id: use_action
@@ -23,9 +23,9 @@ jobs:
           permissions: issues:read, actions:write
 
       - name: Use token to read details
-        uses: actions/github-script@v2
+        uses: actions/github-script@v6
         with:
           github-token: ${{ steps.use_action.outputs.token }}
           script: |
-            const repo = await github.repos.get(context.repo);
+            const repo = await github.rest.repos.get(context.repo);
             console.log(JSON.stringify(repo, null, 2));
