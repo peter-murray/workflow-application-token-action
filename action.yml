@@ -69,7 +69,7 @@ outputs:
     description: If check run information was provided this will be the corresponding id.
 
 runs:
-  using: node12
+  using: node16
   main: dist/index.js
 
 branding:
