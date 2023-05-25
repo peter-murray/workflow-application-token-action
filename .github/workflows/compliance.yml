@@ -1,0 +1,15 @@
+name: License and Security Scanning
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  scan:
+    uses: advancedcsg/actions-template-common/.github/workflows/fossa-analyze.yml@v1.0.1
+    secrets:
+      FOSSA_API_KEY: ${{ secrets.FOSSA_API_KEY }}
