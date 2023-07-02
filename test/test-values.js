@@ -27,6 +27,10 @@ module.exports = {
   getTestOrganization: function(appName) {
     return getAppTestValue(appName, 'org');
   },
+
+  getTestUser: function(appName) {
+    return getAppTestValue(appName, 'user');
+  }
 }
 
 function loadData() {

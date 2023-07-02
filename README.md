@@ -54,11 +54,11 @@ _Note: the private keys can and should be rotated periodically to limit the risk
 
 
 ### Install the GitHub Application
-Once you have the GitHub Application defined, you will need to install the application on the target organization or repository/
+Once you have the GitHub Application defined, you will need to install the application on the target organization, user, or repository/
 repositories that you want it to have access to. These will be any repositories that you want to gather information
 from or want the application to modify as per the scopes that were defined when the application was installed.
 
-_Note: The GitHub Application will need to be installed on the organization and or repository that you are executing
+_Note: The GitHub Application will need to be installed on the organization or user account, or repository that you are executing
 the GitHub Actions workflow from, as the implementation requires this to be able to generate the access tokens_.
 
 
@@ -76,6 +76,7 @@ generates for you or Base64 encode it in the secret.
 * `application_private_key`: A private key generated for the GitHub Application so that you can authenticate (PEM format or base64 encoded)
 * `permissions`: The optional limited permissions to request, specifying this allows you to request a subset of the permissions for the underlying GitHub Application. Defaults to all permissions available to the GitHub Application when not specified. Must be provided in a comma separated list of token permissions e.g. `issues:read, secrets:write, packages:read`
 * `organization`: An optional organization name if the GitHub Application is installed at the Organization level (instead of the repository).
+* `user`: An optional user name if the GitHub Application is installed on the user's account (instead of the repository).
 * `github_api_base_url`: An optional URL to the GitHub API, this will be read and loaded from the runner environment by default, but you might be bridging access to a secondary GHES instance or from GHES to GHEC, you can utilize this to make sure the Octokit library is talking to the right GitHub instance.
 * `https_proxy`: An optional proxy to use for connecting with the GitHub instance. If the runner has `HTTP_PROXY` or `HTTPS_PROXY` specified as environment variables it will attempt to use those if this parameter is not specified.
 

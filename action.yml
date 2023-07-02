@@ -21,6 +21,10 @@ inputs:
     description: The GitHub Organization to get the application installation for, if not specified will use the current repository instead
     required: false
 
+  user:
+    description: The GitHub User to get the application installation for, if not specified will use the current repository instead
+    required: false
+
   github_api_base_url:
     description: The GitHub API base URL to use, no needed it working within the same GitHub instance as the workflow as it will get picked up from the environment
     required: false

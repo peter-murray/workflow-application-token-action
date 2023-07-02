@@ -21,6 +21,7 @@ async function run() {
 
     try {
       const userSpecifiedOrganization = core.getInput('organization')
+        , userSpecifiedUser = core.getInput('user')
         , repository = process.env['GITHUB_REPOSITORY']
         , repoParts = repository.split('/')
       ;
@@ -36,6 +37,16 @@ async function run() {
           installationId = installation.id;
         } else {
           fail(null, `GitHub Application is not installed on the specified organization: ${userSpecifiedOrganization}`);
+        }
+      } else if (userSpecifiedUser) {
+        core.info(`Obtaining application installation for user: ${userSpecifiedUser}`);
+
+        // use the user specified to get the installation
+        const installation = await app.getUserInstallation(userSpecifiedUser);
+        if (installation && installation.id) {
+          installationId = installation.id;
+        } else {
+          fail(null, `GitHub Application is not installed on the specified user: ${userSpecifiedUser}`);
         }
       } else {
         core.info(`Obtaining application installation for repository: ${repository}`);
