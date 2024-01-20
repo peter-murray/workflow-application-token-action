@@ -1,0 +1,12 @@
+name: Versioning
+
+on:
+  release:
+    types: [published, edited]
+
+jobs:
+  updateMajorTag:
+    name: Update major tag
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Actions-R-Us/actions-tagger@v2
