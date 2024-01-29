@@ -1,0 +1,44 @@
+# Tests this action success by the application already being installed on an organization
+
+name: Test Success - organization - installed with revocation
+
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: The name of the branch to checkout for the action
+        required: true
+        default: main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout specified branch
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
+
+      - name: Checkout
+        if: github.event_name != 'workflow_dispatch'
+        uses: actions/checkout@v4
+
+      - name: Use action
+        id: use_action
+        uses: ./
+        with:
+          application_id: ${{ secrets.APPLICATION_ID }}
+          application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY }}
+          organization: octodemo
+          revoke_token: true
+
+      - name: Use token to read details
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ steps.use_action.outputs.token }}
+          script: |
+            const repo = await github.rest.repos.get({owner: 'octodemo', repo: 'demo-bootstrap'});
+            console.log(JSON.stringify(repo, null, 2));

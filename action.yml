@@ -29,13 +29,19 @@ inputs:
     description: Option proxy server for making the requests
     required: false
 
+  revoke_token:
+    description: Flag to revoke the token after the job is complete, defaults to 'false', set to 'true' to revoke in the post job processing.
+    required: false
+    default: 'false'
+
 outputs:
   token:
     description: A valid token representing the Application that can be used to access what the Application has been scoped to access.
 
 runs:
-  using: node16
-  main: dist/index.js
+  using: node20
+  main: dist/main/index.js
+  post: dist/post/index.js
 
 branding:
   icon: lock

@@ -68,6 +68,11 @@ async function run() {
         core.setOutput('token', accessToken.token);
         core.info(JSON.stringify(accessToken));
         core.info(`Successfully generated an access token for application.`)
+
+        if (core.getBooleanInput('revoke_token')) {
+          // Store the token for post state invalidation of it once the job is complete
+          core.saveState('token', accessToken.token);
+        }
       } else {
         fail('No installation of the specified GitHub application was able to be retrieved.');
       }
