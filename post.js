@@ -3,15 +3,19 @@ const core = require('@actions/core')
   ;
 
 async function revokeToken() {
+  const token = core.getState('token');
+
+  if (!token) {
+    core.info(`There is no valid token stored in the action state, nothing to revoke.`);
+    return;
+  }
+
   try {
     const revokeToken = core.getBooleanInput('revoke_token');
     if (revokeToken) {
       core.info(`GitHub Application token revocation being performed...`);
-
       const baseUrl = core.getInput('github_api_base_url');
       const proxy = core.getInput('https_proxy')
-      const token = core.getState('token');
-
       const revoked = await githubApplication.revokeAccessToken(token, baseUrl, proxy);
       if (revoked) {
         core.info(`  token has been revoked.`)
