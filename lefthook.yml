@@ -9,10 +9,6 @@ extends: {}
 pre-commit:
   parallel: true
   commands:
-    run tests:
-      glob: "*.{js,jsx,ts,tsx}"
-      exclude: "dist/"
-      run: npm run test
     build distributables:
       skip: ["merge", "rebase"]
       run: npm run build && git add dist

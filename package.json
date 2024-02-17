@@ -4,6 +4,7 @@
   "description": "GitHub Action to generate a GitHub Application access token for use in GitHub Actions workflows",
   "main": "index.js",
   "scripts": {
+    "prepare": "lefthook install",
     "test": "mocha --recursive \"lib/**/*.test.js\"",
     "build": "ncc build -m index.js"
   },
