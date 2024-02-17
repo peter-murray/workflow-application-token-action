@@ -28,6 +28,10 @@
   "devDependencies": {
     "@vercel/ncc": "^0.38.1",
     "chai": "^4.4.1",
-    "mocha": "^10.2.0"
+    "mocha": "^10.2.0",
+    "lefthook": "^1.6.1"
+  },
+  "volta": {
+    "node": "20.11.0"
   }
 }

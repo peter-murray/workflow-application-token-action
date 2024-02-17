@@ -1,0 +1,21 @@
+# EXAMPLE USAGE
+# Refer for explanation to following link:
+# https://github.com/evilmartians/lefthook/blob/master/docs/full_guide.md
+#
+
+color: true
+extends: {}
+
+pre-commit:
+  parallel: true
+  commands:
+    run tests:
+      glob: "*.{js,jsx,ts,tsx}"
+      exclude: "dist/"
+      run: npm run test
+    build distributables:
+      skip: ["merge", "rebase"]
+      run: npm run build && git add dist
+    make shell script executable:
+      glob: "*.sh"
+      run: git update-index --chmod=+x
