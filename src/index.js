@@ -1,18 +1,15 @@
-const core = require('@actions/core')
-  , githubApplication = require('./lib/github-application')
-  ;
-
+const core = require('@actions/core'),
+  githubApplication = require('./lib/github-application');
 async function run() {
   let app;
 
   try {
-    const privateKey = getRequiredInputValue('application_private_key')
-      , applicationId = getRequiredInputValue('application_id')
-      , githubApiBaseUrl = core.getInput('github_api_base_url')
-      , httpsProxy = core.getInput('https_proxy')
-      ;
+    const privateKey = getRequiredInputValue('application_private_key'),
+      applicationId = getRequiredInputValue('application_id'),
+      githubApiBaseUrl = core.getInput('github_api_base_url'),
+      httpsProxy = core.getInput('https_proxy');
     app = await githubApplication.create(privateKey, applicationId, githubApiBaseUrl, null, httpsProxy);
-  } catch(err) {
+  } catch (err) {
     fail(err, 'Failed to initialize GitHub Application connection using provided id and private key');
   }
 
@@ -20,11 +17,9 @@ async function run() {
     core.info(`Found GitHub Application: ${app.name}`);
 
     try {
-      const userSpecifiedOrganization = core.getInput('organization')
-        , repository = process.env['GITHUB_REPOSITORY']
-        , repoParts = repository.split('/')
-      ;
-
+      const userSpecifiedOrganization = core.getInput('organization'),
+        repository = process.env['GITHUB_REPOSITORY'],
+        repoParts = repository.split('/');
       let installationId;
 
       if (userSpecifiedOrganization) {
@@ -52,10 +47,10 @@ async function run() {
       if (installationId) {
         const permissions = {};
         // Build up the list of requested permissions
-        let permissionInput = core.getInput("permissions");
+        let permissionInput = core.getInput('permissions');
         if (permissionInput) {
-          for (let p of permissionInput.split(",")){
-            let [pName, pLevel] = p.split(":", 2);
+          for (let p of permissionInput.split(',')) {
+            let [pName, pLevel] = p.split(':', 2);
             permissions[pName.trim()] = pLevel.trim();
           }
           core.info(`Requesting limitation on GitHub Application permissions to only: ${JSON.stringify(permissions)}`);
@@ -67,7 +62,7 @@ async function run() {
         core.setSecret(accessToken.token);
         core.setOutput('token', accessToken.token);
         core.info(JSON.stringify(accessToken));
-        core.info(`Successfully generated an access token for application.`)
+        core.info(`Successfully generated an access token for application.`);
 
         if (core.getBooleanInput('revoke_token')) {
           // Store the token for post state invalidation of it once the job is complete
@@ -94,5 +89,5 @@ function fail(err, message) {
 }
 
 function getRequiredInputValue(key) {
-  return core.getInput(key, {required: true});
+  return core.getInput(key, { required: true });
 }
