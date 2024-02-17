@@ -2,7 +2,7 @@ name: Dependabot Build
 on:
   push:
     branches:
-      - dependabot/*
+      - dependabot/**/*
 
 permissions:
   contents: write
