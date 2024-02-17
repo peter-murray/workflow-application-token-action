@@ -1,12 +1,14 @@
 {
   "name": "workflow-application-token-action",
-  "version": "1.0.1",
+  "version": "3.0.0",
   "description": "GitHub Action to generate a GitHub Application access token for use in GitHub Actions workflows",
   "main": "index.js",
   "scripts": {
     "prepare": "lefthook install",
     "test": "mocha --recursive \"lib/**/*.test.js\"",
-    "build": "ncc build -m index.js"
+    "build-main": "ncc build --source-map --license licenses.txt --minify index.js -o dist/main",
+    "build-post": "ncc build --source-map --license licenses.txt --minify post.js -o dist/post",
+    "build": "npm run build-main && npm run build-post"
   },
   "keywords": [
     "github-actions",

@@ -1,6 +1,6 @@
 {
   "name": "Workspace",
-  "image": "ghcr.io/octodemo/container-nodejs-development:base-latest",
+  "image": "ghcr.io/octodemo/development-containers/javascript:base-202401-r1",
   "extensions": [
     "dbaeumer.vscode-eslint",
     "redhat.vscode-yaml",

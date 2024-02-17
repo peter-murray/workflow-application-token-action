@@ -1,33 +1,31 @@
-'use strict';
+"use strict";
 
-const os = require('os')
-  , path = require('path')
-  , fs = require('fs')
-  ;
-
+const os = require("os"),
+  path = require("path"),
+  fs = require("fs");
 const data = loadData();
 
 module.exports = {
-  getApplicationId: function(appName) {
-    return getAppTestValue(appName, 'applicationId');
+  getApplicationId: function (appName) {
+    return getAppTestValue(appName, "applicationId");
   },
 
-  getApplicationPrivateKey: function(appName) {
-    return getAppTestValue(appName, 'privateKey');
+  getApplicationPrivateKey: function (appName) {
+    return getAppTestValue(appName, "privateKey");
   },
 
-  getTestRepository: function(appName) {
-    return getAppTestValue(appName, 'repo.repo');
+  getTestRepository: function (appName) {
+    return getAppTestValue(appName, "repo.repo");
   },
 
-  getTestRepositoryOwner: function(appName) {
-    return getAppTestValue(appName, 'repo.owner');
+  getTestRepositoryOwner: function (appName) {
+    return getAppTestValue(appName, "repo.owner");
   },
 
-  getTestOrganization: function(appName) {
-    return getAppTestValue(appName, 'org');
+  getTestOrganization: function (appName) {
+    return getAppTestValue(appName, "org");
   },
-}
+};
 
 function loadData() {
   const testDataFile = getTestDataFileName();
@@ -36,8 +34,10 @@ function loadData() {
   if (fs.existsSync(testDataFile)) {
     try {
       data = JSON.parse(fs.readFileSync(testDataFile));
-    } catch(err) {
-      console.error(`Failed to parse data file ${testDataFile}: ${err.message}`);
+    } catch (err) {
+      console.error(
+        `Failed to parse data file ${testDataFile}: ${err.message}`
+      );
       data = null;
     }
   }
@@ -46,16 +46,14 @@ function loadData() {
 }
 
 function getTestDataFileName() {
-  if (os.platform() === 'win32') {
-    return path.join(process.env.LOCALAPPDATA, '.github_application');
-  } else {
-    return path.join(process.env.HOME, '.github_application');
-  }
+  return ".github_application";
 }
 
 function getAppTestValue(name, key) {
   if (!data) {
-    console.error(`No data for tests has been loaded, please ensure you have a valid file for testing at ${getTestDataFileName()}.`);
+    console.error(
+      `No data for tests has been loaded, please ensure you have a valid file for testing at ${getTestDataFileName()}.`
+    );
     return null;
   }
 
@@ -64,10 +62,10 @@ function getAppTestValue(name, key) {
 
   if (application) {
     if (key) {
-      const keyPath = key.split('.');
+      const keyPath = key.split(".");
 
       let target = application;
-      keyPath.forEach(key => {
+      keyPath.forEach((key) => {
         if (target) {
           target = target[key];
         }

@@ -78,6 +78,7 @@ generates for you or Base64 encode it in the secret.
 * `organization`: An optional organization name if the GitHub Application is installed at the Organization level (instead of the repository).
 * `github_api_base_url`: An optional URL to the GitHub API, this will be read and loaded from the runner environment by default, but you might be bridging access to a secondary GHES instance or from GHES to GHEC, you can utilize this to make sure the Octokit library is talking to the right GitHub instance.
 * `https_proxy`: An optional proxy to use for connecting with the GitHub instance. If the runner has `HTTP_PROXY` or `HTTPS_PROXY` specified as environment variables it will attempt to use those if this parameter is not specified.
+* `revoke_token`: An optional boolean `true` or `false` value to revoke the access token as part of the post job steps in the actions workflow. To preserve backwards compatibility on this action, it defaults to `false`.
 
 #### Examples
 Get a token with all the permissions of the GitHub Application:
@@ -90,7 +91,7 @@ jobs:
     steps:
       - name: Get Token
         id: get_workflow_token
-        uses: peter-murray/workflow-application-token-action@v2
+        uses: peter-murray/workflow-application-token-action@v3
         with:
           application_id: ${{ secrets.APPLICATION_ID }}
           application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY }}
@@ -113,7 +114,7 @@ jobs:
     steps:
       - name: Get Token
         id: get_workflow_token
-        uses: peter-murray/workflow-application-token-action@v2
+        uses: peter-murray/workflow-application-token-action@v3
         with:
           application_id: ${{ secrets.APPLICATION_ID }}
           application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY }}
@@ -137,7 +138,7 @@ jobs:
     steps:
       - name: Get Token
         id: get_workflow_token
-        uses: peter-murray/workflow-application-token-action@v2
+        uses: peter-murray/workflow-application-token-action@v3
         with:
           application_id: ${{ secrets.APPLICATION_ID }}
           application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY }}
@@ -166,7 +167,7 @@ jobs:
     steps:
       - name: Get Token
         id: get_workflow_token
-        uses: peter-murray/workflow-application-token-action@v2
+        uses: peter-murray/workflow-application-token-action@v3
         with:
           application_id: ${{ secrets.APPLICATION_ID }}
           application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY }}
@@ -184,6 +185,14 @@ If on the other hand the proxy server is being detected using environment variab
 then it will be parsed for hostname matches as to whether or not to use the proxy when access the GitHub API.
 
 The format that is supported for `no_proxy` environment variable is a comma separated list of host names, e.g. `api.github.com,www.google.com` of when to not use the proxy server.
+
+
+### Access Token revocation
+
+To provide additional options for security around the access token and waiting on it to expire, you can leverage the `revoke_token` input set to `true` so that at the end of the
+job run, a post actions step will revoke the access token, invalidating it so that is is immediately invalid and cannot be used.
+
+
 
 ### References
 https://docs.github.com/en/developers/apps/authenticating-with-github-apps#authenticating-as-an-installation

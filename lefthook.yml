@@ -9,6 +9,8 @@ extends: {}
 pre-commit:
   parallel: true
   commands:
+    run tests:
+      run: npm run test
     build distributables:
       skip: ["merge", "rebase"]
       run: npm run build && git add dist
