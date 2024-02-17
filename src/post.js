@@ -1,10 +1,12 @@
-const core = require('@actions/core'),
-  githubApplication = require('./lib/github-application');
-async function revokeToken() {
+import * as core from '@actions/core';
+import * as githubApplication from './lib/github-application.js';
+
+async function runRevokeToken() {
   const token = core.getState('token');
 
   if (!token) {
     core.info(`There is no valid token stored in the action state, nothing to revoke.`);
+
     return;
   }
 
@@ -25,9 +27,9 @@ async function revokeToken() {
         `GitHub Application revocation in post action step was skipped. Token will expired based on time set on the token.`,
       );
     }
-  } catch (err) {
-    core.setFailed(`Failed to revoke GitHub Application token; ${err.message}`);
+  } catch (error) {
+    core.setFailed(`Failed to revoke GitHub Application token; ${error.message}`);
   }
 }
 
-revokeToken();
+await runRevokeToken();

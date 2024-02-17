@@ -1,30 +1,27 @@
-"use strict";
+'use strict';
 
-const os = require("os"),
-  path = require("path"),
-  fs = require("fs");
+import fs from 'node:fs';
+
 const data = loadData();
 
-module.exports = {
-  getApplicationId: function (appName) {
-    return getAppTestValue(appName, "applicationId");
-  },
+export const getApplicationId = (appName) => {
+  return getAppTestValue(appName, 'applicationId');
+};
 
-  getApplicationPrivateKey: function (appName) {
-    return getAppTestValue(appName, "privateKey");
-  },
+export const getApplicationPrivateKey = (appName) => {
+  return getAppTestValue(appName, 'privateKey');
+};
 
-  getTestRepository: function (appName) {
-    return getAppTestValue(appName, "repo.repo");
-  },
+export const getTestRepository = (appName) => {
+  return getAppTestValue(appName, 'repo.repo');
+};
 
-  getTestRepositoryOwner: function (appName) {
-    return getAppTestValue(appName, "repo.owner");
-  },
+export const getTestRepositoryOwner = (appName) => {
+  return getAppTestValue(appName, 'repo.owner');
+};
 
-  getTestOrganization: function (appName) {
-    return getAppTestValue(appName, "org");
-  },
+export const getTestOrganization = (appName) => {
+  return getAppTestValue(appName, 'org');
 };
 
 function loadData() {
@@ -35,9 +32,7 @@ function loadData() {
     try {
       data = JSON.parse(fs.readFileSync(testDataFile));
     } catch (err) {
-      console.error(
-        `Failed to parse data file ${testDataFile}: ${err.message}`
-      );
+      console.error(`Failed to parse data file ${testDataFile}: ${err.message}`);
       data = null;
     }
   }
@@ -46,23 +41,22 @@ function loadData() {
 }
 
 function getTestDataFileName() {
-  return ".github_application";
+  return '.github_application';
 }
 
 function getAppTestValue(name, key) {
   if (!data) {
     console.error(
-      `No data for tests has been loaded, please ensure you have a valid file for testing at ${getTestDataFileName()}.`
+      `No data for tests has been loaded, please ensure you have a valid file for testing at ${getTestDataFileName()}.`,
     );
     return null;
   }
 
   const application = data[name];
-  // console.log(`DATA:: ${JSON.stringify(application)}`);
 
   if (application) {
     if (key) {
-      const keyPath = key.split(".");
+      const keyPath = key.split('.');
 
       let target = application;
       keyPath.forEach((key) => {
@@ -73,5 +67,5 @@ function getAppTestValue(name, key) {
       return target;
     }
   }
-  return null;
+  return undefined;
 }

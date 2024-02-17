@@ -1,25 +1,26 @@
-const core = require('@actions/core'),
-  githubApplication = require('./lib/github-application');
+import * as core from '@actions/core';
+import * as githubApplication from './lib/github-application.js';
+
 async function run() {
   let app;
 
   try {
-    const privateKey = getRequiredInputValue('application_private_key'),
-      applicationId = getRequiredInputValue('application_id'),
-      githubApiBaseUrl = core.getInput('github_api_base_url'),
-      httpsProxy = core.getInput('https_proxy');
-    app = await githubApplication.create(privateKey, applicationId, githubApiBaseUrl, null, httpsProxy);
-  } catch (err) {
-    fail(err, 'Failed to initialize GitHub Application connection using provided id and private key');
+    const privateKey = getRequiredInputValue('application_private_key');
+    const applicationId = getRequiredInputValue('application_id');
+    const githubApiBaseUrl = core.getInput('github_api_base_url');
+    const httpsProxy = core.getInput('https_proxy');
+    app = await githubApplication.create(privateKey, applicationId, githubApiBaseUrl, undefined, httpsProxy);
+  } catch (error) {
+    fail(error, 'Failed to initialize GitHub Application connection using provided id and private key');
   }
 
   if (app) {
     core.info(`Found GitHub Application: ${app.name}`);
 
     try {
-      const userSpecifiedOrganization = core.getInput('organization'),
-        repository = process.env['GITHUB_REPOSITORY'],
-        repoParts = repository.split('/');
+      const userSpecifiedOrganization = core.getInput('organization');
+      const repository = process.env['GITHUB_REPOSITORY'];
+      const repoParts = repository.split('/');
       let installationId;
 
       if (userSpecifiedOrganization) {
@@ -27,30 +28,29 @@ async function run() {
 
         // use the organization specified to get the installation
         const installation = await app.getOrganizationInstallation(userSpecifiedOrganization);
-        if (installation && installation.id) {
-          installationId = installation.id;
-        } else {
-          fail(null, `GitHub Application is not installed on the specified organization: ${userSpecifiedOrganization}`);
-        }
+        installationId =
+          installation?.id ??
+          fail(
+            undefined,
+            `GitHub Application is not installed on the specified organization: ${userSpecifiedOrganization}`,
+          );
       } else {
         core.info(`Obtaining application installation for repository: ${repository}`);
 
         // fallback to getting a repository installation
         const installation = await app.getRepositoryInstallation(repoParts[0], repoParts[1]);
-        if (installation && installation.id) {
-          installationId = installation.id;
-        } else {
-          fail(null, `GitHub Application is not installed on repository: ${repository}`);
-        }
+        installationId =
+          installation?.id ?? fail(undefined, `GitHub Application is not installed on repository: ${repository}`);
       }
 
       if (installationId) {
         const permissions = {};
+
         // Build up the list of requested permissions
-        let permissionInput = core.getInput('permissions');
+        const permissionInput = core.getInput('permissions');
         if (permissionInput) {
-          for (let p of permissionInput.split(',')) {
-            let [pName, pLevel] = p.split(':', 2);
+          for (const p of permissionInput.split(',')) {
+            const [pName, pLevel] = p.split(':', 2);
             permissions[pName.trim()] = pLevel.trim();
           }
           core.info(`Requesting limitation on GitHub Application permissions to only: ${JSON.stringify(permissions)}`);
@@ -71,20 +71,21 @@ async function run() {
       } else {
         fail('No installation of the specified GitHub application was able to be retrieved.');
       }
-    } catch (err) {
-      fail(err);
+    } catch (error) {
+      fail(error);
     }
   }
 }
-run();
 
-function fail(err, message) {
-  core.error(err);
+await run();
+
+function fail(error, message) {
+  core.error(error);
 
   if (message) {
     core.setFailed(message);
   } else {
-    core.setFailed(err.message);
+    core.setFailed(error.message);
   }
 }
 

@@ -1,20 +1,14 @@
 {
-  "plugins": ["jest", "@typescript-eslint", "prettier", "unicorn"],
-  "extends": ["plugin:unicorn/recommended", "plugin:github/recommended", "plugin:prettier/recommended"],
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaVersion": 2022,
-    "sourceType": "module",
-    "extraFileExtensions": [".mjs"],
-    "ecmaFeatures": {
-      "impliedStrict": true
-    },
-    "project": "./tsconfig.json"
-  },
+  "plugins": ["mocha", "@typescript-eslint", "prettier", "unicorn", "no-floating-promise"],
+  "extends": [
+    "plugin:unicorn/recommended",
+    "plugin:github/recommended",
+    "plugin:prettier/recommended",
+    "plugin:mocha/recommended"
+  ],
   "env": {
     "node": true,
-    "es6": true,
-    "jest/globals": true
+    "es6": true
   },
   "rules": {
     // Error out for code formatting errors
@@ -62,8 +56,6 @@
     "no-continue": "off",
     // From experience, named exports are almost always desired. I got tired of this rule
     "import/prefer-default-export": "off",
-    // Unused vars are useful to keep method signatures consistent and documented
-    "@typescript-eslint/no-unused-vars": "off",
     // For this project only use kebab-case
     "unicorn/filename-case": [
       "error",
@@ -76,6 +68,7 @@
     // Allow Array.from(set) mitigate TS2569 which would require '--downlevelIteration'
     "unicorn/prefer-spread": "off",
     // Temp disable to prevent mixing changes with other PRs
-    "i18n-text/no-en": "off"
+    "i18n-text/no-en": "off",
+    "no-floating-promise/no-floating-promise": 2
   }
 }
