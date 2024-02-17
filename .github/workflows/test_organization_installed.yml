@@ -18,13 +18,13 @@ jobs:
     steps:
       - name: Checkout specified branch
         if: github.event_name == 'workflow_dispatch'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.inputs.branch }}
 
       - name: Checkout
         if: github.event_name != 'workflow_dispatch'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Use action
         id: use_action
@@ -32,12 +32,12 @@ jobs:
         with:
           application_id: ${{ secrets.APPLICATION_ID }}
           application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY }}
-          organization: octodemo
+          organization: Madrona-Games-Test-Org
 
       - name: Use token to read details
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           github-token: ${{ steps.use_action.outputs.token }}
           script: |
-            const repo = await github.rest.repos.get({owner: 'octodemo', repo: 'demo-bootstrap'});
+            const repo = await github.rest.repos.get({owner: 'Madrona-Games-Test-Org', repo: 'test-repo'});
             console.log(JSON.stringify(repo, null, 2));

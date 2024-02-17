@@ -15,25 +15,25 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-#    services:
-#      squid:
-#        image: ubuntu/squid
-#        ports:
-#          - 3128/tcp
-#        volumes:
-#          - '${{ github.workspace }}:/var/log/squid'
-#        options: --dns 8.8.8.8
+    #    services:
+    #      squid:
+    #        image: ubuntu/squid
+    #        ports:
+    #          - 3128/tcp
+    #        volumes:
+    #          - '${{ github.workspace }}:/var/log/squid'
+    #        options: --dns 8.8.8.8
 
     steps:
       - name: Checkout specified branch
         if: github.event_name == 'workflow_dispatch'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.inputs.branch }}
 
       - name: Checkout
         if: github.event_name != 'workflow_dispatch'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Start Squid Proxy container
         run: |
@@ -61,7 +61,7 @@ jobs:
           sudo cat ${{ github.workspace }}/squid/access.log
 
       - name: Use token to read details
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           github-token: ${{ steps.use_action.outputs.token }}
           script: |

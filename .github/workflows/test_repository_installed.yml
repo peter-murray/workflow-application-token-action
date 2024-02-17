@@ -18,13 +18,13 @@ jobs:
     steps:
       - name: Checkout specified branch
         if: github.event_name == 'workflow_dispatch'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.inputs.branch }}
 
       - name: Checkout
         if: github.event_name != 'workflow_dispatch'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Use action
         id: use_action
@@ -34,7 +34,7 @@ jobs:
           application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY }}
 
       - name: Use token to read details
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           github-token: ${{ steps.use_action.outputs.token }}
           script: |
