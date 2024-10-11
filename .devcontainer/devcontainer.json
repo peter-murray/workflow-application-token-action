@@ -1,10 +1,14 @@
 {
   "name": "Workspace",
-  "image": "ghcr.io/octodemo/development-containers/javascript:base-202401-r1",
-  "extensions": [
-    "dbaeumer.vscode-eslint",
-    "redhat.vscode-yaml",
-    "swellaby.node-pack"
-  ],
-  "postCreateCommand": "npm install"
+  "image": "ghcr.io/octodemo/development-containers/javascript-nodejs-20:base-202408-r2",
+  "postCreateCommand": "npm install",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "redhat.vscode-yaml",
+        "swellaby.node-pack"
+      ],
+    }
+  }
 }

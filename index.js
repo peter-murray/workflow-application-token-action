@@ -85,6 +85,8 @@ run();
 
 function fail(err, message) {
   core.error(err);
+  // Provide a debug controllable stack trace
+  core.debug(err.stack);
 
   if (message) {
     core.setFailed(message);
