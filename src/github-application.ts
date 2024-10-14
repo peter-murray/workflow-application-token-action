@@ -5,15 +5,22 @@ import * as github from '@actions/github';
 import * as jwt from 'jsonwebtoken';
 import { PrivateKey } from './private-key.js';
 
-export async function createApplication (privateKey: string, applicationId: string, baseApiUrl?: string, timeout?: number, proxy?: string): Promise<GitHubApplication> {
+export async function createApplication (
+  privateKey: string,
+  applicationId: string,
+  baseApiUrl?: string,
+  timeout?: number,
+  proxy?: string,
+  ignoreEnvironmentProxy: boolean = false
+): Promise<GitHubApplication> {
   const app = new GitHubApplication(privateKey, applicationId, baseApiUrl);
-  await app.connect(timeout, proxy);
+  await app.connect(timeout, proxy, ignoreEnvironmentProxy);
   return app;
 }
 
-export async function revokeAccessToken(token: string, baseUrl?: string, proxy?: string) {
+export async function revokeAccessToken(token: string, baseUrl?: string, proxy?: string, ignoreEnvironmentProxy: boolean = false) {
   // The token being provided is the one to be invalidated
-  const client = getOctokit(token, baseUrl, proxy);
+  const client = getOctokit(token, baseUrl, proxy, ignoreEnvironmentProxy);
 
   try {
     const resp = await client.rest.apps.revokeInstallationAccessToken();
@@ -61,7 +68,7 @@ export class GitHubApplication {
     this._githubApiUrl = baseApiUrl;
   }
 
-  async connect(validSeconds: number = 60, proxy?: string): Promise<GitHubApplicationMetadata> {
+  async connect(validSeconds: number = 60, proxy?: string, ignoreEnvironmentProxy: boolean = false): Promise<GitHubApplicationMetadata> {
     const self = this
       , secondsNow = Math.floor(Date.now() / 1000)
       , expireInSeconds = validSeconds
@@ -74,7 +81,7 @@ export class GitHubApplication {
     };
 
     const token = jwt.sign(payload, this.privateKey, { algorithm: 'RS256' });
-    this._client = getOctokit(token, this._githubApiUrl, proxy);
+    this._client = getOctokit(token, this._githubApiUrl, proxy, ignoreEnvironmentProxy);
 
     core.debug(`Attempting to fetch GitHub Application for the provided credentials...`);
     try {
@@ -209,13 +216,13 @@ export class GitHubApplication {
   }
 }
 
-function getOctokit(token: string, baseApiUrl?: string, proxy?: string, noProxy?: string) {
+function getOctokit(token: string, baseApiUrl?: string, proxy?: string, ignoreEnvironmentProxy?: boolean) {
   const baseUrl = getApiBaseUrl(baseApiUrl);
 
   const octokitOptions = {
     baseUrl: baseUrl,
     request: {
-      agent: getProxyAgent(baseUrl, proxy, noProxy),
+      agent: getProxyAgent(baseUrl, proxy, ignoreEnvironmentProxy),
       timeout: 5000
     },
   };
@@ -236,12 +243,12 @@ function _validateVariableValue(variableName: string, value?: string) {
   return result;
 }
 
-function getProxyAgent(baseUrl: string, proxy?: string, noProxy?: string) {
+function getProxyAgent(baseUrl: string, proxy?: string, ignoreEnvironmentProxy?: boolean) {
   if (proxy) {
     // User has an explict proxy set, use it
     core.info(`explicit proxy specified as '${proxy}'`);
 
-    //TODO check fof explict exclusion on no_proxy
+    //TODO check for explict exclusion on no_proxy?
     return new HttpsProxyAgent(proxy);
   } else {
     // When loading from the environment, also respect no_proxy settings
@@ -254,14 +261,20 @@ function getProxyAgent(baseUrl: string, proxy?: string, noProxy?: string) {
     if (envProxy) {
       core.info(`environment proxy specified as '${envProxy}'`);
 
-      const noProxy = process.env.no_proxy || process.env.NO_PROXY;
-      if (noProxy) {
-        core.info(`environment no_proxy set as '${noProxy}'`);
-        if (proxyExcluded(noProxy, baseUrl)) {
-          core.info(`environment proxy excluded from no_proxy settings`);
-        } else {
-          core.info(`using proxy '${envProxy}' for GitHub API calls`)
+      if (ignoreEnvironmentProxy) {
+        core.info(`Action has been configured to ignore environment proxy set. Not using the proxy from the environment and going direct for GitHub API calls...`);
+      } else {
+        const noProxy = process.env.no_proxy || process.env.NO_PROXY;
+        if (!noProxy) {
           return new HttpsProxyAgent(envProxy);
+        } else {
+          core.info(`environment no_proxy set as '${noProxy}'`);
+          if (proxyExcluded(noProxy, baseUrl)) {
+            core.info(`environment proxy excluded from no_proxy settings`);
+          } else {
+            core.info(`using proxy '${envProxy}' for GitHub API calls`)
+            return new HttpsProxyAgent(envProxy);
+          }
         }
       }
     }

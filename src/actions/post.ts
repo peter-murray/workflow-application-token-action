@@ -16,10 +16,11 @@ async function revokeToken() {
 
       const baseUrl = core.getInput('github_api_base_url');
       const proxy = core.getInput('https_proxy');
+      const ignoreProxy = core.getBooleanInput('ignore_environment_proxy');
 
-      const revoked = await revokeAccessToken(token, baseUrl, proxy);
+      const revoked = await revokeAccessToken(token, baseUrl, proxy, ignoreProxy);
       if (revoked) {
-        core.info(`  token has been revoked.`)
+        core.info(`  token has been revoked.`);
       } else {
         throw new Error('Failed to revoke the application token, see logs for more information.');
       }
