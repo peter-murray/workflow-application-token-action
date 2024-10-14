@@ -1,16 +1,15 @@
 {
-  "debug.onTaskErrors": "showErrors",
-  "files.trimTrailingWhitespace": true,
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
+  "files.trimTrailingWhitespace": true,
   "editor.detectIndentation": false,
   "[javascript]": {
     "editor.tabSize": 2
   },
-  "[json]": {
-    "editor.tabSize": 2
+  "[jsonc]": {
+    "editor.tabSize": 2,
   },
-  "[yaml]": {
-    "editor.tabSize": 2
-  }
+  "[json]": {
+    "editor.tabSize": 2,
+  },
 }
