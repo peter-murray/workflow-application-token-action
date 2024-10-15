@@ -14,7 +14,7 @@ inputs:
     required: true
 
   permissions:
-    description: "The permissions to request e.g. issues:read,secrets:write,packages:read. Defaults to all available permissions"
+    description: The permissions to request e.g. issues:read,secrets:write,packages:read. Defaults to all available permissions
     required: false
 
   organization:
@@ -28,6 +28,11 @@ inputs:
   https_proxy:
     description: Option proxy server for making the requests
     required: false
+
+  ignore_environment_proxy:
+    description: Optional flag to forcibly ignore the proxy server setting in the environment
+    required: false
+    default: 'false'
 
   revoke_token:
     description: Flag to revoke the token after the job is complete, defaults to 'false', set to 'true' to revoke in the post job processing.

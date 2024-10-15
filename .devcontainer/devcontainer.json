@@ -7,7 +7,8 @@
       "extensions": [
         "dbaeumer.vscode-eslint",
         "redhat.vscode-yaml",
-        "swellaby.node-pack"
+        "swellaby.node-pack",
+        "vitest.explorer"
       ],
     }
   }

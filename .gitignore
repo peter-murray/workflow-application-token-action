@@ -4,3 +4,7 @@
 
 # Node.js / npm
 node_modules
+lib
+
+# Squid logs
+squid
