@@ -12,7 +12,13 @@ async function run() {
       , httpsProxy = core.getInput('https_proxy')
       , ignoreProxy = core.getBooleanInput('ignore_environment_proxy')
       ;
-    app = await createApplication(privateKey, applicationId, githubApiBaseUrl, undefined, httpsProxy, ignoreProxy);
+    app = await createApplication({
+      privateKey,
+      applicationId,
+      baseApiUrl: githubApiBaseUrl,
+      proxy: httpsProxy,
+      ignoreEnvironmentProxy: ignoreProxy
+    });
   } catch(err) {
     fail(err, 'Failed to initialize GitHub Application connection using provided id and private key');
     return;

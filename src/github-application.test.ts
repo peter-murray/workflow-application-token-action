@@ -28,8 +28,10 @@ describe('GitHubApplication', () => {
 
     async function testPrivateKey(value: string | undefined | null, message: string) {
       try {
-        //@ts-ignore
-        await createApplication(value, testValues.getApplicationId(TEST_APPLICATION_NAME));
+        await createApplication({
+          applicationId: testValues.getApplicationId(TEST_APPLICATION_NAME),
+          privateKey: value
+        });
         expect.fail('Should have thrown an error');
       } catch (err) {
         expect(err.message).to.contain(message);
@@ -61,7 +63,11 @@ describe('GitHubApplication', () => {
       try {
         const key = testValues.getApplicationPrivateKey(TEST_APPLICATION_NAME);
         //@ts-ignore
-        await createApplication(key, value);
+        await createApplication({
+          applicationId: value,
+          //@ts-ignore
+          privateKey: key
+        });
         expect.fail('Should have thrown an error');
       } catch (err) {
         expect(err.message).to.contain(message);
@@ -128,7 +134,10 @@ describe('GitHubApplication', () => {
         throw new Error('Application id and key must be provided');
       }
 
-      app = await createApplication(key, id);
+      app = await createApplication({
+        applicationId: id,
+        privateKey: key,
+      });
     });
 
     it('should connect to GitHub.com', async () => {
@@ -232,38 +241,28 @@ describe('GitHubApplication', () => {
             throw new Error('Application id and key must be provided');
           }
 
-          app = await createApplication(
-            applicationKey,
+          app = await createApplication({
             applicationId,
-            //@ts-ignore
-            null,
-            null,
-            `http://${process.env.SQUID_HOST}:3128`
-          );
+            privateKey: applicationKey,
+            proxy: `http://${process.env.SQUID_HOST}:3128`
+          });
         });
 
         it('should be able to get access token for a repository installation', async () => {
-          const repoInstall = await app.getRepositoryInstallation(
-            testValues.getTestRepositoryOwner(TEST_APPLICATION_NAME),
-            testValues.getTestRepository(TEST_APPLICATION_NAME)
-          )
-            , accessToken = await app.getInstallationAccessToken(repoInstall.id)
-            ;
+          const testRepo = fetchTestRepositoryData(TEST_APPLICATION_NAME);
+
+          const repoInstall = await app.getRepositoryInstallation(testRepo.owner, testRepo.repo);
+          const accessToken = await app.getInstallationAccessToken(repoInstall.id);
           expect(accessToken).to.have.property('token');
 
           // Use the token to access the repository
-          // const client = new github.getOctokit(accessToken.token)
-          //   , repoName = testValues.getTestRepository(TEST_APPLICATION_NAME)
-          //   , ownerName = testValues.getTestRepositoryOwner(TEST_APPLICATION_NAME)
-          //   , repo = await client.rest.repos.get({
-          //   owner: ownerName,
-          //   repo: repoName,
-          // });
+          const client = github.getOctokit(accessToken.token);
+          const repo = await client.rest.repos.get(testRepo);
 
-          // expect(repo).to.have.property('status').to.equal(200);
-          // expect(repo).to.have.property('data');
-          // expect(repo.data).to.have.property('owner').to.have.property('login').to.equal(ownerName);
-          // expect(repo.data).to.have.property('name').to.equal(repoName);
+          expect(repo).to.have.property('status').to.equal(200);
+          expect(repo).to.have.property('data');
+          expect(repo.data).to.have.property('owner').to.have.property('login').to.equal(testRepo.owner);
+          expect(repo.data).to.have.property('name').to.equal(testRepo.repo);
           await testRepositoryToken(accessToken.token);
         });
       });

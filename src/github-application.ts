@@ -1,20 +1,22 @@
 import { URL } from 'node:url';
-import { HttpsProxyAgent } from 'https-proxy-agent';
+import { fetch as undiciFetch, ProxyAgent } from 'undici';
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 import * as jwt from 'jsonwebtoken';
 import { PrivateKey } from './private-key.js';
 
-export async function createApplication (
-  privateKey: string,
+export type ApplicationConfig = {
   applicationId: string,
+  privateKey: string,
   baseApiUrl?: string,
   timeout?: number,
   proxy?: string,
-  ignoreEnvironmentProxy: boolean = false
-): Promise<GitHubApplication> {
-  const app = new GitHubApplication(privateKey, applicationId, baseApiUrl);
-  await app.connect(timeout, proxy, ignoreEnvironmentProxy);
+  ignoreEnvironmentProxy?: boolean
+}
+
+export async function createApplication (config : ApplicationConfig): Promise<GitHubApplication> {
+  const app = new GitHubApplication(config.privateKey, config.applicationId, config.baseApiUrl);
+  await app.connect(config.timeout, config.proxy, config.ignoreEnvironmentProxy);
   return app;
 }
 
@@ -219,10 +221,19 @@ export class GitHubApplication {
 function getOctokit(token: string, baseApiUrl?: string, proxy?: string, ignoreEnvironmentProxy?: boolean) {
   const baseUrl = getApiBaseUrl(baseApiUrl);
 
+  const proxyAgent = getProxyAgent(baseUrl, proxy, ignoreEnvironmentProxy);
+  const fetchClient = (url, options) => {
+    const mergedOptions = {...options};
+    if (proxyAgent) {
+      mergedOptions['dispatcher'] = proxyAgent
+    }
+    return undiciFetch(url, mergedOptions)
+  }
+
   const octokitOptions = {
     baseUrl: baseUrl,
     request: {
-      agent: getProxyAgent(baseUrl, proxy, ignoreEnvironmentProxy),
+      fetch: fetchClient,
       timeout: 5000
     },
   };
@@ -243,13 +254,14 @@ function _validateVariableValue(variableName: string, value?: string) {
   return result;
 }
 
-function getProxyAgent(baseUrl: string, proxy?: string, ignoreEnvironmentProxy?: boolean) {
-  if (proxy) {
+function getProxyAgent(baseUrl: string, proxy?: string, ignoreEnvironmentProxy?: boolean): ProxyAgent | undefined {
+  let proxyUri: string | undefined = undefined;
+
+  if (proxy && proxy.trim().length > 0) {
     // User has an explict proxy set, use it
     core.info(`explicit proxy specified as '${proxy}'`);
-
     //TODO check for explict exclusion on no_proxy?
-    return new HttpsProxyAgent(proxy);
+    proxyUri = proxy;
   } else {
     // When loading from the environment, also respect no_proxy settings
     const envProxy = process.env.http_proxy
@@ -258,7 +270,7 @@ function getProxyAgent(baseUrl: string, proxy?: string, ignoreEnvironmentProxy?:
       || process.env.HTTPS_PROXY
       ;
 
-    if (envProxy) {
+    if (envProxy && envProxy.trim().length > 0) {
       core.info(`environment proxy specified as '${envProxy}'`);
 
       if (ignoreEnvironmentProxy) {
@@ -266,18 +278,22 @@ function getProxyAgent(baseUrl: string, proxy?: string, ignoreEnvironmentProxy?:
       } else {
         const noProxy = process.env.no_proxy || process.env.NO_PROXY;
         if (!noProxy) {
-          return new HttpsProxyAgent(envProxy);
+          proxyUri = envProxy;
         } else {
           core.info(`environment no_proxy set as '${noProxy}'`);
           if (proxyExcluded(noProxy, baseUrl)) {
             core.info(`environment proxy excluded from no_proxy settings`);
           } else {
             core.info(`using proxy '${envProxy}' for GitHub API calls`)
-            return new HttpsProxyAgent(envProxy);
+            proxyUri = envProxy;
           }
         }
       }
     }
+  }
+
+  if (proxyUri) {
+    return new ProxyAgent({uri: proxyUri});
   }
   return undefined;
 }
