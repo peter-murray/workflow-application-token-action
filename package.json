@@ -27,15 +27,15 @@
     "node": ">=24"
   },
   "dependencies": {
-    "@actions/core": "^1.11.1",
-    "@actions/github": "^6.0.0",
+    "@actions/core": "^3.0.1",
+    "@actions/github": "^9.1.1",
     "jsonwebtoken": "^9.0.2",
-    "undici": "^6.20.1"
+    "undici": "^8.4.1"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.7",
-    "@types/node": "^20.0.0",
-    "@vercel/ncc": "^0.38.2",
+    "@types/node": "^24.0.0",
+    "@vercel/ncc": "^0.44.0",
     "chai": "^4.3.4",
     "typescript": "^5.5.3",
     "vitest": "^4.1.8"
