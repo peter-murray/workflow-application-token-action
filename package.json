@@ -1,6 +1,6 @@
 {
   "name": "workflow-application-token-action",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "GitHub Action to generate a GitHub Application access token for use in GitHub Actions workflows",
   "type": "module",
   "private": true,
@@ -24,7 +24,7 @@
     "url": "https://github.com/peter-murray/workflow-application-token-action"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   },
   "dependencies": {
     "@actions/core": "^1.11.1",
@@ -38,6 +38,6 @@
     "@vercel/ncc": "^0.38.2",
     "chai": "^4.3.4",
     "typescript": "^5.5.3",
-    "vitest": "^2.0.2"
+    "vitest": "^4.1.8"
   }
 }

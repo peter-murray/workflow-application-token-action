@@ -43,7 +43,7 @@ jobs:
           mkdir ${{ github.workspace }}/squid
           sudo chown proxy:proxy ${{ github.workspace }}/squid
           docker run -dit --name squid -p 3128:3128 -v ${{ github.workspace }}/test/squid.conf:/etc/squid/squid.conf -v ${{ github.workspace }}/squid:/var/log/squid ubuntu/squid:latest
-          sleep 5
+          sleep 10
           docker logs squid
           docker inspect squid
           curl http://localhost:3128
